@@ -40,4 +40,40 @@ public class UserController {
         }
         return response; //返回响应
     }
+
+    /**
+     * 用户登陆
+
+     * @param session 浏览器session
+     * @return 服务响应
+     */
+    @RequestMapping(value = "login.do", method = RequestMethod.GET)
+    @ResponseBody //指定获取浏览器响应转换成指定的格式(json)
+    public ServerResponse<User> logout(HttpSession session) {
+        session.removeAttribute(Const.CURRENT_USER); //从session中移除当前用户
+        return ServerResponse.createBySuccess(); //返回成功的响应
+    }
+
+    /**
+     * 用户注册
+     * @param user 用户
+     * @return 服务响应
+     */
+    @RequestMapping(value = "register.do", method = RequestMethod.GET)
+    @ResponseBody //指定获取浏览器响应转换成指定的格式(json)
+    public ServerResponse<String> register(User user) {
+        return iUserService.register(user);
+    }
+
+    /**
+     * 检查参数是否合法
+     * @param str 参数
+     * @param type 参数类型
+     * @return 参数是否合法
+     */
+    @RequestMapping(value = "check_valid.do", method = RequestMethod.GET)
+    @ResponseBody //指定获取浏览器响应转换成指定的格式(json)
+    public ServerResponse<String> checkValid(String str, String type) {
+        return iUserService.checkValid(str, type);
+    }
 }

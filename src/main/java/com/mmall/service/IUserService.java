@@ -15,4 +15,19 @@ public interface IUserService {
      * @return 服务响应
      */
     ServerResponse<User> login(String username, String password);
+
+    /**
+     * 注册方法
+     * @param user 用户
+     * @return 服务响应
+     */
+    ServerResponse<String> register(User user);
+
+    /**
+     * 检查参数是否合法
+     * @param str 参数
+     * @param type 参数类型
+     * @return 参数是否合法
+     */
+    ServerResponse<String> checkValid(String str, String type);
 }
