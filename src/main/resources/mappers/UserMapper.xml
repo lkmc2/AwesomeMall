@@ -179,7 +179,7 @@
     
     <select id="checkAnswer" resultType="int" parameterType="map">
         select
-        count (1)
+        count(1)
         from mmall_user
         where username = #{username}
         and question = #{question}
@@ -188,7 +188,7 @@
 
     <update id="updatePasswordByUsername" parameterType="map">
         update mmall_user
-        set password = #{passwordnew}, update_time = now()
+        set password = #{passwordNew}, update_time = now()
         where username = #{username}
     </update>
 
@@ -197,7 +197,7 @@
         count(1)
         from mmall_user
         where password = #{password}
-        and id = #{userid}
+        and id = #{userId}
     </select>
 
     <select id="checkEmailByUserId" resultType="int" parameterType="map">
@@ -205,7 +205,7 @@
         count(1)
         from mmall_user
         where email = #{email}
-        and id != #{userid}
+        and id != #{userId}
     </select>
 
 

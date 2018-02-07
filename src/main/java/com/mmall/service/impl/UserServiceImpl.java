@@ -176,4 +176,19 @@ public class UserServiceImpl implements IUserService {
         }
         return ServerResponse.createByErrorMessage("更新个人信息失败");
     }
+
+    /**
+     * 获取用户信息
+     * @param userId 用户id
+     * @return 对应的用户信息
+     */
+    @Override
+    public ServerResponse<User> getInformation(Integer userId) {
+        User user = userMapper.selectByPrimaryKey(userId); //根据用户id查询用户
+        if (user == null) {
+            return ServerResponse.createByErrorMessage("找不到当前用户");
+        }
+        user.setPassword(StringUtils.EMPTY); //将用户密码设为空
+        return ServerResponse.createBySuccess(user); //返回带用户信息的成功响应
+    }
 }
