@@ -31,4 +31,10 @@ public interface UserMapper {
 
     //通过用户名修改密码
     int updatePasswordByUsername(@Param("username") String username, @Param("passwordNew") String passwordNew);
+
+    //检查用户密码是否正确
+    int checkPassword(@Param("password")String password, @Param("userId")Integer userId);
+
+    //通过用户id检查邮箱是否已被他人占用
+    int checkEmailByUserId(@Param("email") String email, @Param("userId") Integer userId);
 }

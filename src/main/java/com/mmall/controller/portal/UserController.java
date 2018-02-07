@@ -128,4 +128,44 @@ public class UserController {
     public ServerResponse<String> forgetResetPassword(String username, String passwordNew, String forgetToken) {
         return iUserService.forgetResetPassword(username, passwordNew, forgetToken);
     }
+
+    /**
+     * 用户登陆状态下的重置密码
+     * @param session 浏览器session
+     * @param passwordOld 旧密码
+     * @param passwordNew 新密码
+     * @return 重置密码是否成功
+     */
+    @RequestMapping(value = "reset_password.do", method = RequestMethod.GET)
+    @ResponseBody //指定获取浏览器响应转换成指定的格式(json)
+    public ServerResponse<String> resetPassword(HttpSession session, String passwordOld, String passwordNew) {
+        User user = (User) session.getAttribute(Const.CURRENT_USER); //获取session中的用户数据
+        if (user == null) {
+            return ServerResponse.createByErrorMessage("用户未登录");
+        }
+        return iUserService.resetPassword(passwordOld, passwordNew, user); //重置用户密码
+    }
+
+    /**
+     * 更新用户信息
+     * @param session 浏览器session
+     * @param user 用户
+     * @return 是否更新用户信息成功
+     */
+    @RequestMapping(value = "update_information.do", method = RequestMethod.GET)
+    @ResponseBody //指定获取浏览器响应转换成指定的格式(json)
+    public ServerResponse<User> updateInformation(HttpSession session, User user) {
+        User currentUser = (User) session.getAttribute(Const.CURRENT_USER); //获取session中的用户数据
+        if (currentUser == null) {
+            return ServerResponse.createByErrorMessage("用户未登录");
+        }
+        user.setId(currentUser.getId()); //为user设置缓存中的用户id
+        user.setUsername(currentUser.getUsername()); //用户名不能被更新，从session中获取
+
+        ServerResponse<User> response = iUserService.updateInformation(user); //更新用户信息
+        if (response.isSuccess()) { //更新用户信息成功
+            session.setAttribute(Const.CURRENT_USER, response.getData()); //将session的用户信息更新
+        }
+        return response;
+    }
 }

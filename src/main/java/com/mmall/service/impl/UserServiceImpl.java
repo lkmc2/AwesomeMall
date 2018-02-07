@@ -130,11 +130,50 @@ public class UserServiceImpl implements IUserService {
 
             if (rowCount > 0) {
                 return ServerResponse.createBySuccessMessage("修改密码成功");
-            } else {
-                return ServerResponse.createByErrorMessage("Token错误，请重新获取重置密码的Token");
             }
+        } else {
+            return ServerResponse.createByErrorMessage("Token错误，请重新获取重置密码的Token");
         }
         return ServerResponse.createByErrorMessage("修改密码失败");
     }
 
+    @Override
+    public ServerResponse<String> resetPassword(String passwordOld, String passwordNew, User user) {
+        //防止横向越权，需要校验用户的旧密码
+        int resultCount = userMapper.checkPassword(MD5Util.MD5EncodeUtf8(passwordOld), user.getId());
+        if (resultCount == 0) {
+            return ServerResponse.createByErrorMessage("旧密码错误");
+        }
+
+        user.setPassword(MD5Util.MD5EncodeUtf8(passwordNew)); //为用户设置新密码
+        int updateCount = userMapper.updateByPrimaryKeySelective(user); //通过主键有选择性更新用户数据
+        if (updateCount > 0) {
+            return ServerResponse.createBySuccessMessage("密码更新成功");
+        }
+        return ServerResponse.createByErrorMessage("密码更新失败");
+    }
+
+    @Override
+    public ServerResponse<User> updateInformation(User user) {
+        //username不能被更新
+        //email不能是已存在的
+        //通过用户id检查邮箱是否已被他人占用
+        int resultCount = userMapper.checkEmailByUserId(user.getEmail(), user.getId());
+        if (resultCount > 0) {
+            return ServerResponse.createByErrorMessage("email已存在，请更新email再尝试更新");
+        }
+
+        User updateUser = new User(); //新建用户并设置对应的属性
+        updateUser.setId(user.getId());
+        updateUser.setEmail(user.getEmail());
+        updateUser.setPhone(user.getPhone());
+        updateUser.setQuestion(user.getQuestion());
+        updateUser.setAnswer(user.getAnswer());
+
+        int updateCount = userMapper.updateByPrimaryKeySelective(updateUser); //选择性更新该用户
+        if (updateCount > 0) {
+            return ServerResponse.createBySuccess("更新个人信息成功", updateUser);
+        }
+        return ServerResponse.createByErrorMessage("更新个人信息失败");
+    }
 }

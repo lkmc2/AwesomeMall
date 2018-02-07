@@ -55,4 +55,20 @@ public interface IUserService {
      * @return 是否重置成功
      */
     ServerResponse<String> forgetResetPassword(String username, String passwordNew, String forgetToken);
+
+    /**
+     * 登陆状态下重置密码
+     * @param passwordOld 旧密码
+     * @param passwordNew 新密码
+     * @param user 用户
+     * @return 是否重置成功
+     */
+    ServerResponse<String> resetPassword(String passwordOld, String passwordNew, User user);
+
+    /**
+     * 更新用户信息
+     * @param user 用户
+     * @return 是否更新成功
+     */
+    ServerResponse<User> updateInformation(User user);
 }
