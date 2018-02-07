@@ -30,4 +30,20 @@ public interface IUserService {
      * @return 参数是否合法
      */
     ServerResponse<String> checkValid(String str, String type);
+
+    /**
+     * 根据用户名选择找回密码的问题
+     * @param username 用户名
+     * @return 找回密码的问题
+     */
+    ServerResponse<String> selectQuestion(String username);
+
+    /**
+     * 检查找回密码问题的答案是否正确
+     * @param username 用户名
+     * @param question 找回密码问题
+     * @param answer 用户的回答
+     * @return 答案是否正确
+     */
+    ServerResponse<String> checkAnswer(String username, String question, String answer);
 }

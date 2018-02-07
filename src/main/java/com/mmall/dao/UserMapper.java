@@ -23,4 +23,9 @@ public interface UserMapper {
     //mabatis中有多个参数需要加@Param注解
     //根据用户名和密码查询用户用于登陆
     User selectLogin(@Param("username") String username, @Param("password") String password);
+
+    String selectQuestionByUsername(String username); //通过用户名选择找回密码的问题
+
+    //检查找回密码问题的答案是否正确
+    int checkAnswer(@Param("username") String username, @Param("question") String question, @Param("answer") String answer);
 }

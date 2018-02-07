@@ -9,7 +9,7 @@ import java.io.Serializable;
  * Created by lkmc2 on 2018/2/2.
  * 服务响应对象
  */
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL) //属性为null时，该属性不显示
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL) //将该类序列化为Json（属性为null时，该属性不显示）
 public class ServerResponse<T> implements Serializable {
     private int status; //返回状态
     private String msg; //消息

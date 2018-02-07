@@ -2,6 +2,7 @@ package com.mmall.service.impl;
 
 import com.mmall.common.Const;
 import com.mmall.common.ServerResponse;
+import com.mmall.common.TokenCache;
 import com.mmall.dao.UserMapper;
 import com.mmall.pojo.User;
 import com.mmall.service.IUserService;
@@ -9,6 +10,8 @@ import com.mmall.util.MD5Util;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 /**
  * Created by lkmc2 on 2018/2/2.
@@ -80,4 +83,30 @@ public class UserServiceImpl implements IUserService {
         }
         return ServerResponse.createBySuccessMessage("检验成功");
     }
+
+    @Override
+    public ServerResponse<String> selectQuestion(String username) {
+        ServerResponse validResponse = this.checkValid(username, Const.USERNAME); //检查用户名是否存在
+        if (validResponse.isSuccess()) { //用户不存在
+            return ServerResponse.createByErrorMessage("用户不存在");
+        }
+        String question = userMapper.selectQuestionByUsername(username); //通过用户名选择找回密码的问题
+        if (StringUtils.isNoneBlank(question)) {
+            return ServerResponse.createBySuccess(question); //带找回密码问题的服务响应
+        }
+        return ServerResponse.createByErrorMessage("找回密码的问题是空的");
+    }
+
+    @Override
+    public ServerResponse<String> checkAnswer(String username, String question, String answer) {
+        int resultCount = userMapper.checkAnswer(username, question, answer); //检查找回密码问题的答案是否正确
+        if (resultCount > 0) { //用户找回密码问题答案正确
+            //UUID格式：11dc1d83-3e65-43bd-8de4-47425edfbf66
+            String forgetToken = UUID.randomUUID().toString(); //生成随机UUID
+            TokenCache.setKey("token_" + username, forgetToken); //为用户设置Token
+            return ServerResponse.createBySuccess(forgetToken); //返回带Token的响应
+        }
+        return ServerResponse.createByErrorMessage("问题的答案错误");
+    }
+
 }

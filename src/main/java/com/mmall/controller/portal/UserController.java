@@ -47,7 +47,7 @@ public class UserController {
      * @param session 浏览器session
      * @return 服务响应
      */
-    @RequestMapping(value = "login.do", method = RequestMethod.GET)
+    @RequestMapping(value = "logout.do", method = RequestMethod.GET)
     @ResponseBody //指定获取浏览器响应转换成指定的格式(json)
     public ServerResponse<User> logout(HttpSession session) {
         session.removeAttribute(Const.CURRENT_USER); //从session中移除当前用户
@@ -75,5 +75,44 @@ public class UserController {
     @ResponseBody //指定获取浏览器响应转换成指定的格式(json)
     public ServerResponse<String> checkValid(String str, String type) {
         return iUserService.checkValid(str, type);
+    }
+
+    /**
+     * 从session中获取用户数据
+     * @param session 当前页面的session
+     * @return 带用户数据的响应
+     */
+    @RequestMapping(value = "get_user_info.do", method = RequestMethod.GET)
+    @ResponseBody //指定获取浏览器响应转换成指定的格式(json)
+    public ServerResponse<User> getUserInfo(HttpSession session) {
+        User user = (User) session.getAttribute(Const.CURRENT_USER); //获取session中的用户数据
+        if (user != null) { //用户数据非空
+            return ServerResponse.createBySuccess(user); //正确响应
+        }
+        return ServerResponse.createByErrorMessage("用户未登录，无法获取当前用户的信息");
+    }
+
+    /**
+     * 忘记密码，通过用户名获取找回密码的问题
+     * @param username 用户名
+     * @return 找回密码的问题
+     */
+    @RequestMapping(value = "forget_get_question.do", method = RequestMethod.GET)
+    @ResponseBody //指定获取浏览器响应转换成指定的格式(json)
+    public ServerResponse<String> forgetGetQuestion(String username) {
+        return iUserService.selectQuestion(username); //通过用户名获取找回密码的问题
+    }
+
+    /**
+     * 检查用户填写的找回密码的问题答案是否正确
+     * @param username 用户名
+     * @param question 找回密码问题
+     * @param answer 用户填写的答案
+     * @return 答案是否正确
+     */
+    @RequestMapping(value = "forget_check_answer.do", method = RequestMethod.GET)
+    @ResponseBody //指定获取浏览器响应转换成指定的格式(json)
+    public ServerResponse<String> forgetCheckAnswer(String username, String question, String answer) {
+        return iUserService.checkAnswer(username, question, answer);
     }
 }
