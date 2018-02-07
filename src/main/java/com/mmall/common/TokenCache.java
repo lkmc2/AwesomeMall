@@ -16,6 +16,8 @@ public class TokenCache {
 
     private static Logger logger = LoggerFactory.getLogger(TokenCache.class); //日志记录
 
+    public static final String TOKEN_PREFIX = "token_"; //Token key的前缀
+
     //本地Token缓存，Guava
     private static LoadingCache<String, String> localCache
             = CacheBuilder.newBuilder()

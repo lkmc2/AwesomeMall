@@ -115,4 +115,17 @@ public class UserController {
     public ServerResponse<String> forgetCheckAnswer(String username, String question, String answer) {
         return iUserService.checkAnswer(username, question, answer);
     }
+
+    /**
+     * 用户忘记密码后重置密码
+     * @param username 用户名
+     * @param passwordNew 新密码
+     * @param forgetToken 服务器给该账号的Token认证
+     * @return 是否重置成功
+     */
+    @RequestMapping(value = "forget_reset_password.do", method = RequestMethod.GET)
+    @ResponseBody //指定获取浏览器响应转换成指定的格式(json)
+    public ServerResponse<String> forgetResetPassword(String username, String passwordNew, String forgetToken) {
+        return iUserService.forgetResetPassword(username, passwordNew, forgetToken);
+    }
 }

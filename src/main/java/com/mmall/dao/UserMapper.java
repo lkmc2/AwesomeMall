@@ -28,4 +28,7 @@ public interface UserMapper {
 
     //检查找回密码问题的答案是否正确
     int checkAnswer(@Param("username") String username, @Param("question") String question, @Param("answer") String answer);
+
+    //通过用户名修改密码
+    int updatePasswordByUsername(@Param("username") String username, @Param("passwordNew") String passwordNew);
 }
