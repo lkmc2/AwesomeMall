@@ -78,4 +78,11 @@ public interface IUserService {
      * @return 对应的用户信息
      */
     ServerResponse<User> getInformation(Integer userId);
+
+    /**
+     * 检查用户是否是管理员（backend后台）
+     * @param user 用户
+     * @return 用户是否是管理员
+     */
+    ServerResponse checkAdminRole(User user);
 }

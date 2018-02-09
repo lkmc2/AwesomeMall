@@ -177,11 +177,6 @@ public class UserServiceImpl implements IUserService {
         return ServerResponse.createByErrorMessage("更新个人信息失败");
     }
 
-    /**
-     * 获取用户信息
-     * @param userId 用户id
-     * @return 对应的用户信息
-     */
     @Override
     public ServerResponse<User> getInformation(Integer userId) {
         User user = userMapper.selectByPrimaryKey(userId); //根据用户id查询用户
@@ -190,5 +185,13 @@ public class UserServiceImpl implements IUserService {
         }
         user.setPassword(StringUtils.EMPTY); //将用户密码设为空
         return ServerResponse.createBySuccess(user); //返回带用户信息的成功响应
+    }
+
+    @Override
+    public ServerResponse checkAdminRole(User user) {
+        if (user != null && user.getRole() == Const.Role.ROLE_ADMIN) { //用户非空并且是管理员
+            return ServerResponse.createBySuccess(); //返回成功的响应
+        }
+        return ServerResponse.createByError(); //返回失败的响应
     }
 }
