@@ -1,6 +1,9 @@
 package com.mmall.service;
 
 import com.mmall.common.ServerResponse;
+import com.mmall.pojo.Category;
+
+import java.util.List;
 
 /**
  * Created by lkmc2 on 2018/2/9.
@@ -25,4 +28,17 @@ public interface ICategoryService {
      */
     ServerResponse updateCategoryName(Integer categoryId, String categoryName);
 
+    /**
+     * 查询子节点的分类信息，并且不递归，保持平级
+     * @param categoryId 分类id
+     * @return 是否获取子节点成功
+     */
+    ServerResponse<List<Category>> getChildrenParallelCategory(Integer categoryId);
+
+    /**
+     * 递归查询本节点的id和孩子节点的id
+     * @param categoryId 分类id
+     * @return 带子节点id列表的响应
+     */
+    ServerResponse selectCategoryAndChildrenById(Integer categoryId);
 }
