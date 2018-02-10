@@ -27,7 +27,7 @@ public class CategoryServiceImpl implements ICategoryService {
     private Logger logger = LoggerFactory.getLogger(CategoryServiceImpl.class); //日志打印器
 
     @Autowired
-    private CategoryMapper categoryMapper; //连接数据库的分类匹配接口（相当于UserDao）
+    private CategoryMapper categoryMapper; //连接数据库的分类匹配接口（相当于Dao）
 
     @Override
     public ServerResponse addCategory(String categoryName, Integer parentId) {
