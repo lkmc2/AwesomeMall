@@ -72,4 +72,24 @@ public class ProductManageController {
         }
     }
 
+    /**
+     * 根据id获取产品详情
+     * @param session 浏览器详情
+     * @param productId 产品id
+     * @return 产品详情
+     */
+    @RequestMapping("detail.do")
+    @ResponseBody //使返回值自动使用json序列化
+    public ServerResponse getDetail(HttpSession session, Integer productId) {
+        User user = (User) session.getAttribute(Const.CURRENT_USER); //从session中获取用户数据
+        if (user == null) { //用户为空
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录，请登录管理员");
+        }
+
+        if (iUserService.checkAdminRole(user).isSuccess()) { //用户是管理员
+            return iProductService.manageProductDetail(productId); //获取产品详情
+        } else { //非管理员
+            return ServerResponse.createByErrorMessage("无权限操作");
+        }
+    }
 }

@@ -2,6 +2,7 @@ package com.mmall.service;
 
 import com.mmall.common.ServerResponse;
 import com.mmall.pojo.Product;
+import com.mmall.vo.ProductDetailVo;
 
 /**
  * Created by lkmc2 on 2018/2/10.
@@ -25,4 +26,11 @@ public interface IProductService {
      * @return 是否设置成功
      */
     ServerResponse<String> setSaleStatus(Integer productId, Integer status);
+
+    /**
+     * 根据产品id获取产品值详情
+     * @param productId 产品id
+     * @return 带产品值详情的响应
+     */
+    ServerResponse<ProductDetailVo> manageProductDetail(Integer productId);
 }

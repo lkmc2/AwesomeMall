@@ -2,9 +2,14 @@ package com.mmall.service.impl;
 
 import com.mmall.common.ResponseCode;
 import com.mmall.common.ServerResponse;
+import com.mmall.dao.CategoryMapper;
 import com.mmall.dao.ProductMapper;
+import com.mmall.pojo.Category;
 import com.mmall.pojo.Product;
 import com.mmall.service.IProductService;
+import com.mmall.util.DateTimeUtil;
+import com.mmall.util.PropertiesUtil;
+import com.mmall.vo.ProductDetailVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +24,9 @@ public class ProductServiceImpl implements IProductService {
 
     @Autowired
     private ProductMapper productMapper; //连接数据库的产品匹配接口（相当于Dao）
+
+    @Autowired
+    private CategoryMapper categoryMapper; //连接数据库的分类匹配接口（相当于Dao）
 
     @Override
     public ServerResponse saveOrUpdateProduct(Product product) {
@@ -64,5 +72,50 @@ public class ProductServiceImpl implements IProductService {
             return ServerResponse.createBySuccessMessage("修改产品销售状态成功");
         }
         return ServerResponse.createByErrorMessage("修改产品销售状态失败");
+    }
+
+    @Override
+    public ServerResponse<ProductDetailVo> manageProductDetail(Integer productId) {
+        if (productId == null) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), ResponseCode.ILLEGAL_ARGUMENT.getDesc());
+        }
+
+        Product product = productMapper.selectByPrimaryKey(productId); //通过id从数据库中选择产品
+        if (product == null) {
+            return ServerResponse.createByErrorMessage("产品已下架或者删除");
+        }
+        //VO对象--value object
+        ProductDetailVo productDetailVo = assembleProduct(product); //根据产品生成产品值对象
+        return ServerResponse.createBySuccess(productDetailVo);
+    }
+
+    /**
+     * 根据产品生成产品值对象
+     * @param product 产品
+     * @return 产品值对象
+     */
+    private ProductDetailVo assembleProduct(Product product) {
+        ProductDetailVo productDetailVo = new ProductDetailVo();
+        productDetailVo.setId(product.getId());
+        productDetailVo.setSubtitile(product.getSubtitle());
+        productDetailVo.setPrice(product.getPrice());
+        productDetailVo.setMainImage(product.getMainImage());
+        productDetailVo.setSubImages(product.getSubImages());
+        productDetailVo.setCategoryId(product.getCategoryId());
+        productDetailVo.setDetail(product.getDetail());
+        productDetailVo.setName(product.getName());
+        productDetailVo.setStatus(product.getStatus());
+        productDetailVo.setStock(product.getStock());
+
+        productDetailVo.setImageHost(PropertiesUtil.getProperty("ftp.server.http.prefix", "http://image.lin.com/"));;
+        Category category = categoryMapper.selectByPrimaryKey(product.getCategoryId()); //根据id从数据库中获取该类别
+        if (category == null) { //该分类为空
+            productDetailVo.setParentCategoryId(0); //默认根节点
+        } else {
+            productDetailVo.setParentCategoryId(category.getParentId()); //设置父分类id
+        }
+        productDetailVo.setCreateTime(DateTimeUtil.dateToStr(product.getCreateTime()));
+        productDetailVo.setUpdateTime(DateTimeUtil.dateToStr(product.getUpdateTime()));
+        return productDetailVo;
     }
 }
