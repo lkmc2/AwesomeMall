@@ -176,7 +176,7 @@
         from mmall_user
         where username = #{username}
     </select>
-    
+
     <select id="checkAnswer" resultType="int" parameterType="map">
         select
         count(1)

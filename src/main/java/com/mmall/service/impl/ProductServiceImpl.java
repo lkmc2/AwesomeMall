@@ -157,4 +157,22 @@ public class ProductServiceImpl implements IProductService {
         productListVo.setStatus(product.getStatus());
         return productListVo;
     }
+
+    @Override
+    public ServerResponse<PageInfo> searchProduct(String productName, Integer productId, int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize); //开始分页
+        if (StringUtils.isNotBlank(productName)) { //产品名非空
+            productName = "%" + productName + "%"; //给产品名前后添加百分号
+        }
+
+        List<Product> productList = productMapper.selectByNameAndProductId(productName, productId);//通过产品名或产品id选择产品
+        List<ProductListVo> productListVoList = Lists.newArrayList(); //新建列表
+        for (Product productItem : productList) {
+            ProductListVo productListVo = assembleProductListVo(productItem); //根据产品生成产品列表值对象
+            productListVoList.add(productListVo); //将对象添加到列表
+        }
+        PageInfo pageResult = new PageInfo(productList); //创建页面信息
+        pageResult.setList(productListVoList); //设置页面列表
+        return ServerResponse.createBySuccess(pageResult); //返回带列表信息的响应
+    }
 }
