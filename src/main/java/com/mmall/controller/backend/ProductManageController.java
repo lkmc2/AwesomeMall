@@ -10,6 +10,7 @@ import com.mmall.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
@@ -88,6 +89,30 @@ public class ProductManageController {
 
         if (iUserService.checkAdminRole(user).isSuccess()) { //用户是管理员
             return iProductService.manageProductDetail(productId); //获取产品详情
+        } else { //非管理员
+            return ServerResponse.createByErrorMessage("无权限操作");
+        }
+    }
+
+    /**
+     * 获取产品列表
+     * @param session 浏览器详情
+     * @param pageNum 页号
+     * @param pageSize 展示页面产品数量
+     * @return 产品列表
+     */
+    @RequestMapping("list.do")
+    @ResponseBody //使返回值自动使用json序列化
+    public ServerResponse getList(HttpSession session,
+                                  @RequestParam(value = "pageNum", defaultValue = "1")int pageNum,
+                                  @RequestParam(value = "pageSize", defaultValue = "10")int pageSize) {
+        User user = (User) session.getAttribute(Const.CURRENT_USER); //从session中获取用户数据
+        if (user == null) { //用户为空
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录，请登录管理员");
+        }
+
+        if (iUserService.checkAdminRole(user).isSuccess()) { //用户是管理员
+            return iProductService.getProductList(pageNum, pageSize); //获取产品列表
         } else { //非管理员
             return ServerResponse.createByErrorMessage("无权限操作");
         }

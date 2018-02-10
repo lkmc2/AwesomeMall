@@ -33,4 +33,12 @@ public interface IProductService {
      * @return 带产品值详情的响应
      */
     ServerResponse<ProductDetailVo> manageProductDetail(Integer productId);
+
+    /**
+     * 获取产品列表
+     * @param pageNum 当前页号
+     * @param pageSize 展示产品条数
+     * @return 产品列表
+     */
+    ServerResponse getProductList(int pageNum, int pageSize);
 }

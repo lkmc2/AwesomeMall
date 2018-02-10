@@ -1,5 +1,8 @@
 package com.mmall.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.google.common.collect.Lists;
 import com.mmall.common.ResponseCode;
 import com.mmall.common.ServerResponse;
 import com.mmall.dao.CategoryMapper;
@@ -10,9 +13,12 @@ import com.mmall.service.IProductService;
 import com.mmall.util.DateTimeUtil;
 import com.mmall.util.PropertiesUtil;
 import com.mmall.vo.ProductDetailVo;
+import com.mmall.vo.ProductListVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * Created by lkmc2 on 2018/2/10.
@@ -117,5 +123,38 @@ public class ProductServiceImpl implements IProductService {
         productDetailVo.setCreateTime(DateTimeUtil.dateToStr(product.getCreateTime()));
         productDetailVo.setUpdateTime(DateTimeUtil.dateToStr(product.getUpdateTime()));
         return productDetailVo;
+    }
+
+    @Override
+    public ServerResponse getProductList(int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize); //开始进行分页
+        List<Product> productList = productMapper.selectList(); //获取产品列表
+
+        List<ProductListVo> productListVoList = Lists.newArrayList(); //新建列表
+        for (Product productItem : productList) {
+            ProductListVo productListVo = assembleProductListVo(productItem); //根据产品生成产品列表值对象
+            productListVoList.add(productListVo); //将对象添加到列表
+        }
+        PageInfo pageResult = new PageInfo(productList); //创建页面信息
+        pageResult.setList(productListVoList); //设置页面列表
+        return ServerResponse.createBySuccess(pageResult); //返回带列表信息的响应
+    }
+
+    /**
+     * 根据产品生成产品列表值对象
+     * @param product 产品
+     * @return 产品列表值对象
+     */
+    private ProductListVo assembleProductListVo(Product product) {
+        ProductListVo productListVo = new ProductListVo(); //产品列表值对象
+        productListVo.setId(product.getId());
+        productListVo.setName(product.getName());
+        productListVo.setCategoryId(product.getCategoryId());
+        productListVo.setImageHost(PropertiesUtil.getProperty("ftp.server.http.prefix", "http://image.lin.com/"));
+        productListVo.setMainImage(product.getSubImages());
+        productListVo.setPrice(product.getPrice());
+        productListVo.setSubtitle(product.getSubtitle());
+        productListVo.setStatus(product.getStatus());
+        return productListVo;
     }
 }
