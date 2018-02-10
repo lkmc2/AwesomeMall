@@ -22,4 +22,7 @@ public interface ProductMapper {
 
     //通过产品名或产品id选择产品
     List<Product> selectByNameAndProductId(@Param("productName")String productName, @Param("productId") Integer productId);
+
+    //通过产品名或者分类id选择产品
+    List<Product> selectByNameAndCategoryId(@Param("productName")String productName, @Param("categoryIdList") List<Integer> categoryIdList);
 }

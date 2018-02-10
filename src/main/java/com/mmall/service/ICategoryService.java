@@ -40,5 +40,5 @@ public interface ICategoryService {
      * @param categoryId 分类id
      * @return 带子节点id列表的响应
      */
-    ServerResponse selectCategoryAndChildrenById(Integer categoryId);
+    ServerResponse<List<Integer>> selectCategoryAndChildrenById(Integer categoryId);
 }

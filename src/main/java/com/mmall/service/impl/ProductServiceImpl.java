@@ -3,12 +3,14 @@ package com.mmall.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
+import com.mmall.common.Const;
 import com.mmall.common.ResponseCode;
 import com.mmall.common.ServerResponse;
 import com.mmall.dao.CategoryMapper;
 import com.mmall.dao.ProductMapper;
 import com.mmall.pojo.Category;
 import com.mmall.pojo.Product;
+import com.mmall.service.ICategoryService;
 import com.mmall.service.IProductService;
 import com.mmall.util.DateTimeUtil;
 import com.mmall.util.PropertiesUtil;
@@ -18,6 +20,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,6 +36,8 @@ public class ProductServiceImpl implements IProductService {
 
     @Autowired
     private CategoryMapper categoryMapper; //连接数据库的分类匹配接口（相当于Dao）
+
+    private ICategoryService iCategoryService; //分类服务
 
     @Override
     public ServerResponse saveOrUpdateProduct(Product product) {
@@ -174,5 +179,72 @@ public class ProductServiceImpl implements IProductService {
         PageInfo pageResult = new PageInfo(productList); //创建页面信息
         pageResult.setList(productListVoList); //设置页面列表
         return ServerResponse.createBySuccess(pageResult); //返回带列表信息的响应
+    }
+
+    @Override
+    public ServerResponse<ProductDetailVo> getProductDetail(Integer productId) {
+        if (productId == null) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), ResponseCode.ILLEGAL_ARGUMENT.getDesc());
+        }
+
+        Product product = productMapper.selectByPrimaryKey(productId); //通过id从数据库中选择产品
+        if (product == null) { //查询到的产品为空
+            return ServerResponse.createByErrorMessage("产品已下架或者删除");
+        }
+        if (product.getStatus() != Const.ProductStatusEnum.ON_SALE.getCode()) { //产品为非在线状态
+            return ServerResponse.createByErrorMessage("产品已经下架或者删除");
+        }
+
+        //VO对象--value object
+        ProductDetailVo productDetailVo = assembleProduct(product); //根据产品生成产品值对象
+        return ServerResponse.createBySuccess(productDetailVo);
+    }
+
+    @Override
+    public ServerResponse<PageInfo> getProductByKeywordCategory(String keyword, Integer categoryId,
+                                                                int pageNum, int pageSize, String orderBy) {
+        if (StringUtils.isBlank(keyword) && categoryId == null) { //关键词为空或分类id为空
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), ResponseCode.ILLEGAL_ARGUMENT.getDesc());
+        }
+
+        List<Integer> categoryIdList = new ArrayList<Integer>(); //分类id列表
+        if (categoryId != null) {
+            Category category = categoryMapper.selectByPrimaryKey(categoryId); //根据id查询分类
+            if (category == null && StringUtils.isBlank(keyword)) { //没有该分类，也没有该关键字
+                PageHelper.startPage(pageNum, pageSize); //开始分页
+                List<ProductListVo> productListVoList = Lists.newArrayList(); //新建列表
+                PageInfo pageInfo = new PageInfo(productListVoList); //生成页面信息
+                return ServerResponse.createBySuccess(pageInfo); //返回空结果集
+            }
+
+            //根据id查询当前节点的分类id或其子节点的分类id
+            categoryIdList = iCategoryService.selectCategoryAndChildrenById(category.getId()).getData();
+        }
+
+        if (StringUtils.isNotBlank(keyword)) { //关键词非空
+            keyword = "%" + keyword + "%"; //关键词前后加百分号
+        }
+
+        PageHelper.startPage(pageNum, pageSize); //开始分页
+        //排序处理
+        if (StringUtils.isNotBlank(orderBy)) { //排序非空
+            if (Const.ProductListOrderBy.PRICE_ASC_DESC.contains(orderBy)) { //如果该关键词在集合中
+                String[] orderByArray = orderBy.split("_");
+                PageHelper.orderBy(orderByArray[0] + " " + orderByArray[1]); //进行分页排序
+            }
+        }
+        //根据名字或分类id获取产品列表
+        List<Product> productList = productMapper.selectByNameAndCategoryId(
+                StringUtils.isBlank(keyword) ? null : keyword,
+                categoryIdList.size() == 0 ? null : categoryIdList);
+
+        List<ProductListVo> productListVoList = Lists.newArrayList(); //新建列表
+        for (Product product : productList) {
+            ProductListVo productListVo = assembleProductListVo(product); //生成产品列表值对象
+            productListVoList.add(productListVo); //将对象添加到列表
+        }
+        PageInfo pageInfo = new PageInfo(productList); //生成页面信息
+        pageInfo.setList(productListVoList); //设置列表
+        return ServerResponse.createBySuccess(pageInfo); //返回带页面信息的响应
     }
 }
