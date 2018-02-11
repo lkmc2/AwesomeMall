@@ -25,4 +25,14 @@ public interface CartMapper {
 
     //通过用户id查询产品的勾选状态
     int selectCartProductCheckedStatusByUserId(Integer userId);
+
+    //根据传入的用户id和产品id列表删除购物车中的产品
+    int deleteByUserProductIds(@Param("userId")Integer userId, @Param("productIdList") List<String> productIdList);
+
+    //全选或全反选产品
+    int checkedOrUncheckProduct(@Param("userId")Integer userId,
+                                @Param("productId")Integer productId,
+                                @Param("checked")Integer checked);
+
+    int selectCartProductCount(Integer userId); //根据用户id选择购物车中产品的数量
 }

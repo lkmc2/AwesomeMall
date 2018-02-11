@@ -26,6 +26,7 @@
     delete from mmall_cart
     where id = #{id,jdbcType=INTEGER}
   </delete>
+
   <insert id="insert" parameterType="com.mmall.pojo.Cart">
     insert into mmall_cart (id, user_id, product_id, 
       quantity, checked, create_time, 
@@ -118,6 +119,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
+
   <select id="selectCartByUserIdProductId" resultMap="BaseResultMap" parameterType="map">
     select
     <include refid="Base_Column_List"/>
@@ -134,9 +136,38 @@
   </select>
 
   <select id="selectCartProductCheckedStatusByUserId" resultType="java.lang.Integer" parameterType="int">
-    SELECT COUNT(1)
-    FROM mmall_cart
-    WHERE checked = 0
-    AND  user_id = #{userId}
+    select count(1)
+    from mmall_cart
+    where checked = 0
+    and  user_id = #{userId}
+  </select>
+
+
+  <delete id="deleteByUserProductIds" parameterType="map">
+    delete from mmall_cart
+    where user_id = #{userId}
+    <if test="productIdList != null">
+      and product_id in
+      <foreach collection="productIdList" item="item" index="index" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </if>
+  </delete>
+
+  <update id="checkedOrUncheckProduct" parameterType="map">
+    update mmall_cart
+    set checked = #{checked},
+    update_time = now()
+    where user_id = #{userId}
+    <if test="productId != null">
+      and product_id = #{productId}
+    </if>
+  </update>
+
+  <select id="selectCartProductCount" resultType="java.lang.Integer" parameterType="int">
+    select
+    IFNULL(sum(quantity),0) as count
+    from mmall_cart
+    where user_id = #{userId}
   </select>
 </mapper>

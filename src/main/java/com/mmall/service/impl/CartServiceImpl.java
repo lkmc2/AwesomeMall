@@ -1,5 +1,6 @@
 package com.mmall.service.impl;
 
+import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.mmall.common.Const;
 import com.mmall.common.ResponseCode;
@@ -57,8 +58,53 @@ public class CartServiceImpl implements ICartService {
             cartMapper.updateByPrimaryKeySelective(cart); //选择性更新购物车中的数据
         }
 
-        CartVo cartVo = this.getCartVoLimit(userId); //获取带限制购买数的购物车值对象
+        return this.list(userId); //返回根据用户id查询的购物车列表
+    }
+
+    @Override
+    public ServerResponse<CartVo> update(Integer userId, Integer productId, Integer count) {
+        if (productId == null || count == null) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), ResponseCode.ILLEGAL_ARGUMENT.getDesc());
+        }
+
+        Cart cart = cartMapper.selectCartByUserIdProductId(userId, productId); //根据用户id和产品id选择购物车
+        if (cart != null) {
+            cart.setQuantity(count); //更新购物车中的数量
+        }
+        cartMapper.updateByPrimaryKeySelective(cart); //选择性更新购物车的信息
+
+        return this.list(userId); //返回根据用户id查询的购物车列表
+    }
+
+    @Override
+    public ServerResponse<CartVo> deleteProduct(Integer userId, String productIds) {
+        List<String> productList = Splitter.on(",").splitToList(productIds); //用逗号分隔字符串后放入列表中
+        if (CollectionUtils.isEmpty(productList)) { //产品id列表为空
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), ResponseCode.ILLEGAL_ARGUMENT.getDesc());
+        }
+        cartMapper.deleteByUserProductIds(userId, productList); //根据用户id和产品id列表删除购物车中的信息
+
+        return this.list(userId); //返回根据用户id查询的购物车列表
+    }
+
+    @Override
+    public ServerResponse<CartVo> list(Integer userId) {
+        CartVo cartVo = this.getCartVoLimit(userId);//获取带限制购买数的购物车值对象
         return ServerResponse.createBySuccess(cartVo); //返回带购物车信息的成功响应
+    }
+
+    @Override
+    public ServerResponse<CartVo> selectOrUnSelect(Integer userId, Integer productId, Integer checked) {
+        cartMapper.checkedOrUncheckProduct(userId, productId, checked); //选择或者不选购物车中的产品
+        return this.list(userId); //返回根据用户id查询的购物车列表
+    }
+
+    @Override
+    public ServerResponse<Integer> getCartProductCount(Integer userId) {
+        if (userId == null) { //用户id为空
+            return ServerResponse.createBySuccess(0); //返回成功的响应，表示购物车中数量为0
+        }
+        return ServerResponse.createBySuccess(cartMapper.selectCartProductCount(userId)); //获取购物车中产品总数
     }
 
     /**
@@ -123,7 +169,7 @@ public class CartServiceImpl implements ICartService {
         cartVo.setCartTotalPrice(cartTotalPrice); //给购物车值对象设置总价
         cartVo.setCartProductVoList(cartProductVoList); //给购物车值对象设置购物车产品列表
         cartVo.setAllChecked(this.getAllCheckedStatus(userId)); //设置是否全选
-        cartVo.setImageHost(PropertiesUtil.getProperty("http://image.lin.com/")); //设置图片主机前缀
+        cartVo.setImageHost(PropertiesUtil.getProperty("ftp.server.http.prefix")); //设置图片主机前缀
         return cartVo;
     }
 
