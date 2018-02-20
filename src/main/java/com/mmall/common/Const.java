@@ -75,6 +75,20 @@ public class Const {
         public String getValue() {
             return value;
         }
+
+        /**
+         * 根据传入的枚举码获取枚举
+         * @param code 枚举码
+         * @return 与枚举码一致的枚举
+         */
+        public static OrderStatusEnum codeOf(int code) {
+            for (OrderStatusEnum orderStatusEnum : values()) { //遍历所有枚举值
+                if (orderStatusEnum.getCode() == code) { //传入的枚举存在
+                    return orderStatusEnum; //返回当前枚举
+                }
+            }
+            throw new RuntimeException("没有找到对应的枚举");
+        }
     }
 
     //支付宝回调枚举
@@ -106,4 +120,41 @@ public class Const {
             return value;
         }
     }
+
+    //支付类型枚举
+    public enum PaymentTypeEnum {
+        ONLINE_PAY(1, "在线支付");
+
+        PaymentTypeEnum(int code, String value) {
+            this.value = value;
+            this.code = code;
+        }
+
+        private int code;
+        private String value;
+
+        public int getCode() {
+            return code;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        /**
+         * 根据传入的枚举码获取枚举
+         * @param code 枚举码
+         * @return 与枚举码一致的枚举
+         */
+        public static PaymentTypeEnum codeOf(int code) {
+            for (PaymentTypeEnum paymentTypeEnum : values()) { //遍历所有枚举值
+                if (paymentTypeEnum.getCode() == code) { //传入的枚举存在
+                    return paymentTypeEnum; //返回当前枚举
+                }
+            }
+            throw new RuntimeException("没有找到对应的枚举");
+        }
+    }
+
+
 }

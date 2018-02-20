@@ -11,6 +11,14 @@ import java.util.Map;
 
 public interface IOrderService {
     /**
+     * 创建订单
+     * @param userId 用户id
+     * @param shippingId 收货地址id
+     * @return 带订单值对象的响应
+     */
+    ServerResponse createOrder(Integer userId, Integer shippingId);
+
+    /**
      * 请求支付并生成二维码
      * @param orderNo 订单号
      * @param userId 用户id

@@ -20,4 +20,6 @@ public interface OrderItemMapper {
 
     //根据订单号和用户id获取订单子项
     List<OrderItem> getByOrderNoUserId(@Param("orderNo")Long orderNo, @Param("userId")Integer userId);
+
+    void batchInsert(@Param("orderItemList") List<OrderItem> orderItemList); //批量插入订单子项
 }

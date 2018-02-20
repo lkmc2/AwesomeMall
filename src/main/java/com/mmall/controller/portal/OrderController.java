@@ -36,6 +36,22 @@ public class OrderController {
     private IOrderService iOrderService; //订单服务接口
 
     /**
+     * 创建订单
+     * @param session 浏览器session
+     * @param shippingId 送货地址id
+     * @return 带结果参数的响应
+     */
+    @RequestMapping("create.do")
+    @ResponseBody //使返回值自动使用json序列化
+    public ServerResponse create(HttpSession session, Integer shippingId) {
+        User user = (User) session.getAttribute(Const.CURRENT_USER); //从session中获取用户信息
+        if (user == null) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
+        }
+        return iOrderService.createOrder(user.getId(), shippingId); //创建订单
+    }
+
+    /**
      * 请求支付并生成二维码
      *
      * @param session 浏览器session

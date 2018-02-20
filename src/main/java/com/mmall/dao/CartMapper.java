@@ -35,4 +35,6 @@ public interface CartMapper {
                                 @Param("checked")Integer checked);
 
     int selectCartProductCount(Integer userId); //根据用户id选择购物车中产品的数量
+
+    List<Cart> selectCheckedCartByUserId(Integer userId); //根据用户id查询被勾选的购物车
 }
