@@ -50,4 +50,60 @@ public class Const {
             return value;
         }
     }
+
+    //订单状态枚举
+    public enum OrderStatusEnum {
+        CANCELED(0, "已取消"),
+        NO_PAY(10, "未支付"),
+        PAID(20, "已付款"),
+        SHIPPED(40, "已发货"),
+        ORDER_SUCCESS(50, "订单完成"),
+        ORDER_CLOSE(60, "订单关闭");
+
+        OrderStatusEnum(int code, String value) {
+            this.value = value;
+            this.code = code;
+        }
+
+        private int code;
+        private String value;
+
+        public int getCode() {
+            return code;
+        }
+
+        public String getValue() {
+            return value;
+        }
+    }
+
+    //支付宝回调枚举
+    public interface AlipayCallback {
+        String TRADE_STATUS_WAIT_BUYER_PAY = "WAIT_BUYER_PAY"; //交易创建，等待买家付款
+        String TRADE_STATUS_TRADE_SUCCESS = "TRADE_SUCCESS"; //交易支付成功
+
+        String RESPONSE_SUCCESS = "success"; //成功响应
+        String RESPONSE_FAILED = "failed"; //失败响应
+    }
+
+    //支付平台枚举
+    public enum PayPlatformEnum {
+        ALIPAY(1, "支付宝");
+
+        PayPlatformEnum(int code, String value) {
+            this.value = value;
+            this.code = code;
+        }
+
+        private int code;
+        private String value;
+
+        public int getCode() {
+            return code;
+        }
+
+        public String getValue() {
+            return value;
+        }
+    }
 }
