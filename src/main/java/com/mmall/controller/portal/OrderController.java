@@ -52,6 +52,37 @@ public class OrderController {
     }
 
     /**
+     * 取消订单
+     * @param session 浏览器session
+     * @param orderNo 订单号
+     * @return 带结果参数的响应
+     */
+    @RequestMapping("cancel.do")
+    @ResponseBody //使返回值自动使用json序列化
+    public ServerResponse cancel(HttpSession session, Long orderNo) {
+        User user = (User) session.getAttribute(Const.CURRENT_USER); //从session中获取用户信息
+        if (user == null) { //用户为空
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
+        }
+        return iOrderService.cancel(user.getId(), orderNo); //取消订单
+    }
+
+    /**
+     * 获取购物车中已选中的商品详情
+     * @param session 浏览器session
+     * @return 带订单产品值对象的响应
+     */
+    @RequestMapping("get_order_cart_product.do")
+    @ResponseBody //使返回值自动使用json序列化
+    public ServerResponse getOrderCartProduct(HttpSession session) {
+        User user = (User) session.getAttribute(Const.CURRENT_USER); //从session中获取用户信息
+        if (user == null) { //用户为空
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
+        }
+        return iOrderService.getOrderCartProduct(user.getId()); //获取购物车中已选中的商品详情
+    }
+
+    /**
      * 请求支付并生成二维码
      *
      * @param session 浏览器session
@@ -63,7 +94,7 @@ public class OrderController {
     @ResponseBody //使返回值自动使用json序列化
     public ServerResponse pay(HttpSession session, Long orderNo, HttpServletRequest request) {
         User user = (User) session.getAttribute(Const.CURRENT_USER); //从session中获取用户信息
-        if (user == null) {
+        if (user == null) { //用户为空
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
 

@@ -19,6 +19,21 @@ public interface IOrderService {
     ServerResponse createOrder(Integer userId, Integer shippingId);
 
     /**
+     * 取消订单
+     * @param userId 用户id
+     * @param orderNo 订单号
+     * @return 是否取消成功的响应
+     */
+    ServerResponse<String> cancel(Integer userId, Long orderNo);
+
+    /**
+     * 获取购物车中已选中的商品详情
+     * @param userId 用户id
+     * @return 带订单产品值对象的响应
+     */
+    ServerResponse getOrderCartProduct(Integer userId);
+
+    /**
      * 请求支付并生成二维码
      * @param orderNo 订单号
      * @param userId 用户id

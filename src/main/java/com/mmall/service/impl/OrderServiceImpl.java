@@ -22,6 +22,7 @@ import com.mmall.util.DateTimeUtil;
 import com.mmall.util.FTPUtil;
 import com.mmall.util.PropertiesUtil;
 import com.mmall.vo.OrderItemVo;
+import com.mmall.vo.OrderProductVo;
 import com.mmall.vo.OrderVo;
 import com.mmall.vo.ShippingVo;
 import org.apache.commons.collections.CollectionUtils;
@@ -269,10 +270,11 @@ public class OrderServiceImpl implements IOrderService {
      * @return 带购物车子项列表的响应
      */
     private ServerResponse getCartOrderItem(Integer userId, List<Cart> cartList) {
-        List<OrderItem> orderItemList = Lists.newArrayList(); //新建列表
         if (CollectionUtils.isEmpty(cartList)) { //列表为空
             return ServerResponse.createByErrorMessage("购物车为空");
         }
+
+        List<OrderItem> orderItemList = Lists.newArrayList(); //新建列表
 
         //校验购物车数据，包括产品的状态和数量
         for (Cart cartItem : cartList) {
@@ -298,6 +300,52 @@ public class OrderServiceImpl implements IOrderService {
             orderItemList.add(orderItem); //将订单子项添加到列表中
         }
         return ServerResponse.createBySuccess(orderItemList); //返回带订单子项列表的响应
+    }
+
+    @Override
+    public ServerResponse<String> cancel(Integer userId, Long orderNo) {
+        Order order = orderMapper.selectByUserIdAndOrderNo(userId, orderNo); //根据用户id和订单号选择订单
+        if (order == null) {
+            return ServerResponse.createByErrorMessage("该用户此订单不存在");
+        }
+        if (order.getStatus() != Const.OrderStatusEnum.NO_PAY.getCode()) { //订单状态不等于未付款
+            return ServerResponse.createByErrorMessage("已付款，无法取消订单");
+        }
+        Order updateOrder = new Order(); //新建订单对象
+        updateOrder.setId(order.getId()); //设置订单id
+        updateOrder.setStatus(Const.OrderStatusEnum.CANCELED.getCode()); //设置订单状态为已取消
+
+        int rowCount = orderMapper.updateByPrimaryKeySelective(updateOrder); //选择性更新订单
+        if (rowCount > 0) { //更新成功
+            return ServerResponse.createBySuccess(); //返回成功的响应
+        }
+        return ServerResponse.createByError(); //返回失败的响应
+    }
+
+    @Override
+    public ServerResponse getOrderCartProduct(Integer userId) {
+        OrderProductVo orderProductVo = new OrderProductVo(); //新建订单产品值对象
+
+        //从购物车中获取数据
+        List<Cart> cartList = cartMapper.selectCheckedCartByUserId(userId); //根据用户id获取被选择的购物车
+        ServerResponse serverResponse = this.getCartOrderItem(userId, cartList); //获取购物车产品子项
+        if (!serverResponse.isSuccess()) { //响应不成功
+            return serverResponse;
+        }
+        List<OrderItem> orderItemList = (List<OrderItem>) serverResponse.getData(); //获取响应中的数据
+
+        List<OrderItemVo> orderItemVoList = Lists.newArrayList(); //新建订单子项值对象列表
+
+        BigDecimal payment = new BigDecimal("0"); //用于计算总价
+        for (OrderItem orderItem : orderItemList) { //计算所有产品总价
+            payment = BigDecimalUtil.add(payment.doubleValue(), orderItem.getTotalPrice().doubleValue());
+            orderItemVoList.add(assembleOrderItemVo(orderItem)); //将订单子项变成值对象添加到列表
+        }
+        orderProductVo.setProductTotalPrice(payment); //设置产品总价
+        orderProductVo.setOrderItemVoList(orderItemVoList); //设置订单子项值对象列表
+        orderProductVo.setImageHost(PropertiesUtil.getProperty("ftp.server.http.prefix")); //设置图片地址前缀
+
+        return ServerResponse.createBySuccess(orderProductVo); //带订单产品值对象的响应
     }
 
 
