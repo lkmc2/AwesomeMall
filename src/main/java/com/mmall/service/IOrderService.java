@@ -75,4 +75,35 @@ public interface IOrderService {
      * @return 支付成功或失败的响应
      */
     ServerResponse queryOrderPayStatus(Integer userId, Long orderNo);
+
+    /**
+     * 获取用户所有订单的分页信息（后台）
+     * @param pageNum 页号
+     * @param pageSize 页面展示条数
+     * @return 带分页信息的响应
+     */
+    ServerResponse<PageInfo> manageList(int pageNum, int pageSize);
+
+    /**
+     * 获取订单详情（后台）
+     * @param orderNo 订单号
+     * @return 带订单值对象的响应
+     */
+    ServerResponse<OrderVo> manageDetail(Long orderNo);
+
+    /**
+     * 搜索订单（后台）
+     * @param orderNo 订单号
+     * @param pageNum 页号
+     * @param pageSize 页面展示条数
+     * @return 带分页信息的响应
+     */
+    ServerResponse<PageInfo> manageSearch(Long orderNo, int pageNum, int pageSize);
+
+    /**
+     * 设置订单发货（后台）
+     * @param orderNo 订单号
+     * @return 是否发货成功
+     */
+    ServerResponse<String> manageSendGoods(Long orderNo);
 }

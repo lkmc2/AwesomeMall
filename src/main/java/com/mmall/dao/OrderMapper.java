@@ -24,4 +24,6 @@ public interface OrderMapper {
     Order selectByOrderNo(Long orderNo); //根据订单号选择订单
 
     List<Order> selectByUserId(Integer userId); //根据用户id查询订单
+
+    List<Order> selectAllOrder(); //获取全部订单
 }

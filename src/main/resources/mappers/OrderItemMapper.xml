@@ -174,6 +174,13 @@
         and user_id = #{userId}
     </select>
 
+    <select id="getByOrderNo" resultMap="BaseResultMap" parameterType="long">
+        select
+        <include refid="Base_Column_List"/>
+        from mmall_order_item
+        where order_no = #{orderNo}
+    </select>
+
     <insert id="batchInsert" parameterType="list">
         insert into mmall_order_item (id, user_id, order_no,
             product_id, product_name, product_image,

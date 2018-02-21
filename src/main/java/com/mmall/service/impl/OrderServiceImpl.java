@@ -10,7 +10,6 @@ import com.alipay.demo.trade.model.result.AlipayF2FPrecreateResult;
 import com.alipay.demo.trade.service.AlipayTradeService;
 import com.alipay.demo.trade.service.impl.AlipayTradeServiceImpl;
 import com.alipay.demo.trade.utils.ZxingUtils;
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
@@ -38,10 +37,7 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Created by lkmc2 on 2018/2/20.
@@ -226,6 +222,7 @@ public class OrderServiceImpl implements IOrderService {
         order.setOrderNo(orderNo); //设置订单号
         order.setStatus(Const.OrderStatusEnum.NO_PAY.getCode()); //设置状态为未付款
         order.setPostage(0); //设置运费
+        order.setPayment(payment); //设置支付金额
         order.setPaymentType(Const.PaymentTypeEnum.ONLINE_PAY.getCode()); //设置在线付款
 
         order.setUserId(userId); //设置用户id
@@ -388,7 +385,7 @@ public class OrderServiceImpl implements IOrderService {
                 //根据订单号和用户id获取订单子项
                 orderItemList = orderItemMapper.getByOrderNoUserId(order.getOrderNo(), userId);
             } else { //管理员查询
-                //todo 管理员查询的时候 不需要传userId
+                orderItemList = orderItemMapper.getByOrderNo(order.getOrderNo()); //根据订单号获取订单子项
             }
             OrderVo orderVo = assembleOrderVo(order, orderItemList); //生成订单值对象
             orderVoList.add(orderVo); //将订单值对象添加到列表
@@ -574,5 +571,60 @@ public class OrderServiceImpl implements IOrderService {
             return ServerResponse.createBySuccess(); //返回成功的响应
         }
         return ServerResponse.createByError(); //返回失败的响应
+    }
+
+    //backend（后台）
+
+    @Override
+    public ServerResponse<PageInfo> manageList(int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize); //开始分页
+        List<Order> orderList = orderMapper.selectAllOrder(); //获取所有订单
+        List<OrderVo> orderVoList = this.assembleOrderVoList(orderList, null); //生成订单值对象列表
+
+        PageInfo pageResult = new PageInfo(orderList); //新建分页信息
+        pageResult.setList(orderVoList); //设置列表信息
+        return ServerResponse.createBySuccess(pageResult); //返回带分页信息的响应
+    }
+
+    @Override
+    public ServerResponse<OrderVo> manageDetail(Long orderNo) {
+        Order order = orderMapper.selectByOrderNo(orderNo); //根据订单号获取订单
+        if (order == null) {
+            return ServerResponse.createByErrorMessage("订单不存在");
+        }
+
+        List<OrderItem> orderItemList = orderItemMapper.getByOrderNo(orderNo); //根据订单号获取订单子项
+        OrderVo orderVo = this.assembleOrderVo(order, orderItemList); //生成订单值对象
+        return ServerResponse.createBySuccess(orderVo); //返回带订单值对象的响应
+    }
+
+    @Override
+    public ServerResponse<PageInfo> manageSearch(Long orderNo, int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize); //开始分页
+        Order order = orderMapper.selectByOrderNo(orderNo); //根据订单号获取订单
+        if (order == null) {
+            return ServerResponse.createByErrorMessage("订单不存在");
+        }
+
+        List<OrderItem> orderItemList = orderItemMapper.getByOrderNo(orderNo); //根据订单号获取订单子项
+        OrderVo orderVo = this.assembleOrderVo(order, orderItemList); //生成订单值对象
+
+        PageInfo pageResult = new PageInfo(Lists.newArrayList(order)); //新建分页信息
+        pageResult.setList(Lists.newArrayList(orderVo)); //设置列表信息
+        return ServerResponse.createBySuccess(pageResult); //返回带分页信息的响应
+    }
+
+    @Override
+    public ServerResponse<String> manageSendGoods(Long orderNo) {
+        Order order = orderMapper.selectByOrderNo(orderNo); //根据订单号获取订单
+        if (order != null) { //订单非空
+            if (order.getStatus() == Const.OrderStatusEnum.PAID.getCode()) { //订单状态为已付款
+                order.setStatus(Const.OrderStatusEnum.SHIPPED.getCode()); //设置订单状态为已发货
+                order.setSendTime(new Date()); //设置发货时间为现在
+                orderMapper.updateByPrimaryKeySelective(order); //选择性更新订单信息
+                return ServerResponse.createBySuccessMessage("发货成功");
+            }
+        }
+        return ServerResponse.createByErrorMessage("订单不存在");
     }
 }

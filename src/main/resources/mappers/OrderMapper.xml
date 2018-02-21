@@ -222,5 +222,11 @@
         where user_id = #{userId}
         order by create_time desc
     </select>
+    <select id="selectAllOrder" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from mmall_order
+        order by create_time desc
+    </select>
 
 </mapper>
