@@ -1,5 +1,6 @@
 package com.mmall.service;
 
+import com.github.pagehelper.PageInfo;
 import com.mmall.common.ServerResponse;
 import com.mmall.vo.OrderVo;
 
@@ -41,6 +42,15 @@ public interface IOrderService {
      * @return 带订单值对象的响应
      */
     ServerResponse<OrderVo> getOrderDetail(Integer userId, Long orderNo);
+
+    /**
+     * 获取订单列表的分页信息
+     * @param userId 用户id
+     * @param pageNum 页号
+     * @param pageSize 页面展示信息条数
+     * @return 带分页信息的响应
+     */
+    ServerResponse<PageInfo> getOrderList(Integer userId, int pageNum, int pageSize);
 
     /**
      * 请求支付并生成二维码

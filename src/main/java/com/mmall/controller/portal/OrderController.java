@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -96,6 +97,25 @@ public class OrderController {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
         return iOrderService.getOrderDetail(user.getId(), orderNo); //获取订单详情
+    }
+
+    /**
+     * 列出用户的所有订单信息
+     * @param session 浏览器session
+     * @param pageNum 页号
+     * @param pageSize 页面展示条数
+     * @return 带分页信息的响应
+     */
+    @RequestMapping("list.do")
+    @ResponseBody //使返回值自动使用json序列化
+    public ServerResponse list(HttpSession session,
+                               @RequestParam(value = "pageNum", defaultValue = "1")int pageNum,
+                               @RequestParam(value = "pageSize", defaultValue = "10")int pageSize) {
+        User user = (User) session.getAttribute(Const.CURRENT_USER); //从session中获取用户信息
+        if (user == null) { //用户为空
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
+        }
+        return iOrderService.getOrderList(user.getId(), pageNum, pageSize); //获取订单列表的分页信息
     }
 
     /**

@@ -10,6 +10,9 @@ import com.alipay.demo.trade.model.result.AlipayF2FPrecreateResult;
 import com.alipay.demo.trade.service.AlipayTradeService;
 import com.alipay.demo.trade.service.impl.AlipayTradeServiceImpl;
 import com.alipay.demo.trade.utils.ZxingUtils;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mmall.common.Const;
@@ -359,6 +362,38 @@ public class OrderServiceImpl implements IOrderService {
         List<OrderItem> orderItemList = orderItemMapper.getByOrderNoUserId(orderNo, userId);
         OrderVo orderVo = assembleOrderVo(order, orderItemList); //生成订单值对象
         return ServerResponse.createBySuccess(orderVo); //返回带订单值对象的响应
+    }
+
+    @Override
+    public ServerResponse<PageInfo> getOrderList(Integer userId, int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize); //开始分页
+        List<Order> orderList = orderMapper.selectByUserId(userId); //根据用户id查询订单
+        List<OrderVo> orderVoList = this.assembleOrderVoList(orderList, userId); //生成订单值对象列表
+        PageInfo pageResult = new PageInfo(orderList); //新建分页信息
+        pageResult.setList(orderVoList); //设置订单值对象列表
+        return ServerResponse.createBySuccess(pageResult); //返回带分页信息的响应
+    }
+
+    /**
+     * 生成订单值对象列表
+     * @param orderList 订单列表
+     * @param userId 用户id
+     * @return 订单值对象列表
+     */
+    private List<OrderVo> assembleOrderVoList(List<Order> orderList, Integer userId) {
+        List<OrderVo> orderVoList = Lists.newArrayList(); //新建值对象列表
+        for (Order order : orderList) {
+            List<OrderItem> orderItemList = Lists.newArrayList(); //新建产品子项列表
+            if (userId != null) { //用户查询
+                //根据订单号和用户id获取订单子项
+                orderItemList = orderItemMapper.getByOrderNoUserId(order.getOrderNo(), userId);
+            } else { //管理员查询
+                //todo 管理员查询的时候 不需要传userId
+            }
+            OrderVo orderVo = assembleOrderVo(order, orderItemList); //生成订单值对象
+            orderVoList.add(orderVo); //将订单值对象添加到列表
+        }
+        return orderVoList;
     }
 
 
