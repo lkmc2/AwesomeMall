@@ -1,6 +1,7 @@
 package com.mmall.service;
 
 import com.mmall.common.ServerResponse;
+import com.mmall.vo.OrderVo;
 
 import java.util.Map;
 
@@ -32,6 +33,14 @@ public interface IOrderService {
      * @return 带订单产品值对象的响应
      */
     ServerResponse getOrderCartProduct(Integer userId);
+
+    /**
+     * 获取订单详情
+     * @param userId 用户id
+     * @param orderNo 订单号
+     * @return 带订单值对象的响应
+     */
+    ServerResponse<OrderVo> getOrderDetail(Integer userId, Long orderNo);
 
     /**
      * 请求支付并生成二维码

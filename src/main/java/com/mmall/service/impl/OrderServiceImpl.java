@@ -348,6 +348,19 @@ public class OrderServiceImpl implements IOrderService {
         return ServerResponse.createBySuccess(orderProductVo); //带订单产品值对象的响应
     }
 
+    @Override
+    public ServerResponse<OrderVo> getOrderDetail(Integer userId, Long orderNo) {
+        Order order = orderMapper.selectByUserIdAndOrderNo(userId, orderNo); //根据用户id和订单号查询订单
+        if (order == null) { //查询到的订单非空
+            return ServerResponse.createByErrorMessage("没有找到该订单");
+        }
+
+        //根据订单号和用户id查询订单子项
+        List<OrderItem> orderItemList = orderItemMapper.getByOrderNoUserId(orderNo, userId);
+        OrderVo orderVo = assembleOrderVo(order, orderItemList); //生成订单值对象
+        return ServerResponse.createBySuccess(orderVo); //返回带订单值对象的响应
+    }
+
 
     @Override
     public ServerResponse pay(Long orderNo, Integer userId, String path) {

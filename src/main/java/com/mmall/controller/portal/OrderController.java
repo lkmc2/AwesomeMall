@@ -83,6 +83,22 @@ public class OrderController {
     }
 
     /**
+     * 获取订单详情
+     * @param session 浏览器session
+     * @param orderNo 订单号
+     * @return 返回带订单值对象的响应
+     */
+    @RequestMapping("detail.do")
+    @ResponseBody //使返回值自动使用json序列化
+    public ServerResponse detail(HttpSession session, Long orderNo) {
+        User user = (User) session.getAttribute(Const.CURRENT_USER); //从session中获取用户信息
+        if (user == null) { //用户为空
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
+        }
+        return iOrderService.getOrderDetail(user.getId(), orderNo); //获取订单详情
+    }
+
+    /**
      * 请求支付并生成二维码
      *
      * @param session 浏览器session
