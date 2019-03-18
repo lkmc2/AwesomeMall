@@ -1,5 +1,8 @@
 package com.mmall.vo;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -7,13 +10,19 @@ import java.util.List;
  * Created by lkmc2 on 2018/2/11.
  * 购物车Value Object
  */
-
+@ApiModel(value = "购物车VO对象", description = "这是购物车VO对象")
 public class CartVo {
+    @ApiModelProperty(value = "购物车产品值对象列表", name = "cartProductVoList", required = true)
+    private List<CartProductVo> cartProductVoList;
 
-    private List<CartProductVo> cartProductVoList; //购物车产品值对象列表
-    private BigDecimal cartTotalPrice; //购物车总价
-    private Boolean allChecked; //是否全勾选
-    private String imageHost; //图片主机前缀
+    @ApiModelProperty(value = "购物车总价", name = "cartTotalPrice", example = "1500", required = true)
+    private BigDecimal cartTotalPrice;
+
+    @ApiModelProperty(value = "是否全勾选", name = "allChecked", example = "1", required = true)
+    private Boolean allChecked;
+
+    @ApiModelProperty(value = "图片主机前缀", name = "imageHost", example = "test", required = true)
+    private String imageHost;
 
     public List<CartProductVo> getCartProductVoList() {
         return cartProductVoList;

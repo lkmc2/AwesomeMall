@@ -1,48 +1,67 @@
 package com.mmall.vo;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.math.BigDecimal;
 import java.util.List;
 
 /**
  * Created by lkmc2 on 2018/2/20.
- * 订单值对象
+ * 订单VO对象
  */
-
+@ApiModel(value = "订单VO对象", description = "这是订单VO对象")
 public class OrderVo {
 
-    private Long orderNo; //订单号
+    @ApiModelProperty(value = "订单号", name = "orderNo", example = "1491753014256", required = true)
+    private Long orderNo;
 
-    private BigDecimal payment; //价格
+    @ApiModelProperty(value = "实际支付金额", name = "payment", example = "23.50", required = true)
+    private BigDecimal payment;
 
-    private Integer paymentType; //支付类型
+    @ApiModelProperty(value = "支付类型", name = "paymentType", example = "1", required = true)
+    private Integer paymentType;
 
-    private String paymentTypeDesc; //支付描述
+    @ApiModelProperty(value = "支付描述", name = "paymentTypeDesc", example = "这是支付描述", required = true)
+    private String paymentTypeDesc;
 
-    private Integer postage; //运费
+    @ApiModelProperty(value = "运费", name = "postage", example = "15", required = true)
+    private Integer postage;
 
-    private Integer status; //支付状态
+    @ApiModelProperty(value = "订单状态", name = "status", example = "10", required = true)
+    private Integer status;
 
-    private String statusDesc; //支付状态描述
+    @ApiModelProperty(value = "支付状态描述", name = "statusDesc", example = "这是支付状态描述", required = true)
+    private String statusDesc;
 
-    private String paymentTime; //支付时间
+    @ApiModelProperty(value = "支付时间", name = "paymentTime", example = "2019-04-13 21:42:40", required = true)
+    private String paymentTime;
 
-    private String sendTime;  //发货时间
+    @ApiModelProperty(value = "发货时间", name = "sendTime", example = "2019-04-14 21:42:40", required = true)
+    private String sendTime;
 
-    private String endTime; //交易完成时间
+    @ApiModelProperty(value = "交易完成时间", name = "sendTime", example = "2019-04-15 21:42:40", required = true)
+    private String endTime;
 
-    private String closeTime; //交易关闭时间
+    @ApiModelProperty(value = "交易关闭时间", name = "closeTime", example = "2019-04-16 21:42:40", required = true)
+    private String closeTime;
 
-    private String createTime; //创建时间
+    @ApiModelProperty(value = "订单创建时间", name = "createTime", example = "2019-04-13 21:42:40", required = true)
+    private String createTime;
 
-    private List<OrderItemVo> orderItemVoList; //订单子项列表明细
+    @ApiModelProperty(value = "订单子项列表明细", name = "orderItemVoList", required = true)
+    private List<OrderItemVo> orderItemVoList;
 
-    private String imageHost; //图片主机名
+    @ApiModelProperty(value = "图片主机名", name = "imageHost", example = "localhost", required = true)
+    private String imageHost;
 
-    private Integer shippingId; //收货地址id
+    @ApiModelProperty(value = "收货地址id", name = "shippingId", example = "4", required = true)
+    private Integer shippingId;
 
-    private String receiverName; //收货人姓名
+    @ApiModelProperty(value = "收货人姓名", name = "receiverName", example = "王晓芳", required = true)
+    private String receiverName;
 
-    private ShippingVo shippingVo; //地址值对象
+    private ShippingVo shippingVo; //地址对象
 
     public Long getOrderNo() {
         return orderNo;

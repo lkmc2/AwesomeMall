@@ -1,27 +1,38 @@
 package com.mmall.vo;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * Created by lkmc2 on 2018/2/21.
  * 收获地址值对象
  */
-
+@ApiModel(value = "收货地址VO对象", description = "这是收货地址VO对象")
 public class ShippingVo {
 
-    private String receiverName; //收货人姓名
+    @ApiModelProperty(value = "收货人姓名", name = "receiverName", example = "林悦", required = true)
+    private String receiverName;
 
-    private String receiverPhone; //电话
+    @ApiModelProperty(value = "收货人电话", name = "receiverPhone", example = "7350443")
+    private String receiverPhone;
 
-    private String receiverMobile; //手机号
+    @ApiModelProperty(value = "收货人手机号", name = "receiverMobile", example = "13800001234", required = true)
+    private String receiverMobile;
 
-    private String receiverProvince; //省份
+    @ApiModelProperty(value = "省份", name = "receiverProvince", example = "广西省", required = true)
+    private String receiverProvince;
 
-    private String receiverCity; //城市
+    @ApiModelProperty(value = "城市", name = "receiverCity", example = "南宁", required = true)
+    private String receiverCity;
 
-    private String receiverDistrict; //区域
+    @ApiModelProperty(value = "地区", name = "receiverDistrict", example = "西乡塘区", required = true)
+    private String receiverDistrict;
 
-    private String receiverAddress; //地址
+    @ApiModelProperty(value = "收货地址", name = "receiverAddress", example = "潇湘大楼327号", required = true)
+    private String receiverAddress;
 
-    private String receiverZip; //邮编
+    @ApiModelProperty(value = "邮编", name = "receiverZip", example = "530200", required = true)
+    private String receiverZip;
 
     public String getReceiverName() {
         return receiverName;

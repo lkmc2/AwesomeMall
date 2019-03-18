@@ -1,28 +1,54 @@
 package com.mmall.vo;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.math.BigDecimal;
 
 /**
  * Created by lkmc2 on 2018/2/11.
  * 购物车产品值对象Value Object（结合了产品和购物车的一个抽象对象）
  */
-
+@ApiModel(value = "购物车产品VO对象", description = "这是购物车产品VO对象")
 public class CartProductVo {
+    @ApiModelProperty(value = "id", name = "id", example = "1", required = true)
+    private Integer id;
 
-    private Integer id; //值对象id
-    private Integer userId; //用户id
-    private Integer productId; //产品id
-    private Integer quantity; //购物车中此商品的数量
-    private String productName; //产品名
-    private String productSubtitle; //产品子标题
-    private String productMainImage; //产品主图
-    private BigDecimal productPrice; //产品价格
-    private Integer productStatus; //产品状态
-    private BigDecimal productTotalPrice; //产品总价
-    private Integer productStock; //产品库存
-    private Integer productChecked; //是否已勾选
+    @ApiModelProperty(value = "用户id", name = "userId", example = "13", required = true)
+    private Integer userId;
 
-    private String limitQuantity; //限制数量的一个返回结果
+    @ApiModelProperty(value = "产品id", name = "productId", example = "26", required = true)
+    private Integer productId;
+
+    @ApiModelProperty(value = "数量", name = "quantity", example = "2", required = true)
+    private Integer quantity;
+
+    @ApiModelProperty(value = "产品名称", name = "productName", example = "三星Fold", required = true)
+    private String productName;
+
+    @ApiModelProperty(value = "产品子标题", name = "productSubtitle", example = "F:/picture/phone2.jpg")
+    private String productSubtitle;
+
+    @ApiModelProperty(value = "产品主图", name = "productMainImage", example = "F:/picture/phone.jpg")
+    private String productMainImage;
+
+    @ApiModelProperty(value = "价格", name = "productPrice", example = "17000", required = true)
+    private BigDecimal productPrice;
+
+    @ApiModelProperty(value = "状态", name = "productStatus", example = "1", required = true)
+    private Integer productStatus;
+
+    @ApiModelProperty(value = "产品总价", name = "productTotalPrice", example = "34000", required = true)
+    private BigDecimal productTotalPrice;
+
+    @ApiModelProperty(value = "产品库存", name = "productStock", example = "200", required = true)
+    private Integer productStock;
+
+    @ApiModelProperty(value = "是否选择,1=已勾选,0=未勾选", name = "productChecked", example = "1", required = true)
+    private Integer productChecked;
+
+    @ApiModelProperty(value = "限制数量的一个返回结果", name = "limitQuantity", example = "1", required = true)
+    private String limitQuantity;
 
     public Integer getId() {
         return id;

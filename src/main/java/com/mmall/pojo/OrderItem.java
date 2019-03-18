@@ -1,29 +1,44 @@
 package com.mmall.pojo;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
+@ApiModel(value = "订单子表对象", description = "这是订单子表对象")
 public class OrderItem {
+    @ApiModelProperty(hidden = true)
     private Integer id;
 
+    @ApiModelProperty(value = "用户id", name = "userId", example = "13", required = true)
     private Integer userId;
 
+    @ApiModelProperty(value = "订单号", name = "orderNo", example = "1491753014256", required = true)
     private Long orderNo;
 
+    @ApiModelProperty(value = "产品Id", name = "id", example = "1", required = true)
     private Integer productId;
 
+    @ApiModelProperty(value = "产品名称", name = "name", example = "三星Fold", required = true)
     private String productName;
 
+    @ApiModelProperty(value = "产品图片", name = "productImage", example = "F:/picture/phone.jpg")
     private String productImage;
 
+    @ApiModelProperty(value = "生成订单时的商品单价", name = "currentUnitPrice", example = "17000", required = true)
     private BigDecimal currentUnitPrice;
 
+    @ApiModelProperty(value = "数量", name = "quantity", example = "2", required = true)
     private Integer quantity;
 
+    @ApiModelProperty(value = "总价", name = "totalPrice", example = "34000", required = true)
     private BigDecimal totalPrice;
 
+    @ApiModelProperty(value = "创建时间", name = "createTime", example = "2019-04-13 21:42:40", required = true)
     private Date createTime;
 
+    @ApiModelProperty(value = "更新时间", name = "updateTime", example = "2019-04-15 21:42:40", required = true)
     private Date updateTime;
 
     public OrderItem(Integer id, Integer userId, Long orderNo, Integer productId, String productName, String productImage, BigDecimal currentUnitPrice, Integer quantity, BigDecimal totalPrice, Date createTime, Date updateTime) {

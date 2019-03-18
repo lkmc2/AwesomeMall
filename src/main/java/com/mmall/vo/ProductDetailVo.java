@@ -1,29 +1,57 @@
 package com.mmall.vo;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.math.BigDecimal;
 
 /**
  * Created by lkmc2 on 2018/2/10.
  * 产品详情Value Object
  */
-
+@ApiModel(value = "产品详情VO对象", description = "这是产品详情VO对象")
 public class ProductDetailVo {
-
+    @ApiModelProperty(value = "产品Id", name = "id", example = "1", required = true)
     private Integer id;
-    private Integer categoryId; //种类id
-    private String name; //商品详情名
-    private String subtitile; //副标题
-    private String mainImage; //主图片名
-    private String subImages; //子图片名
-    private String detail; //详情描述
-    private BigDecimal price; //价格
-    private Integer stock; //库存
-    private Integer status; //状态
-    private String createTime; //创建时间
-    private String updateTime; //更新事件
 
-    private String imageHost; //图片服务器url前缀
-    private Integer parentCategoryId; //父分类id
+    @ApiModelProperty(value = "分类Id", name = "categoryId", example = "1", required = true)
+    private Integer categoryId;
+
+    @ApiModelProperty(value = "产品名称", name = "name", example = "三星Fold", required = true)
+    private String name;
+
+    @ApiModelProperty(value = "子标题", name = "subtitle", example = "史上第一款折叠屏手机", required = true)
+    private String subtitle;
+
+    @ApiModelProperty(value = "主图片", name = "mainImage", example = "F:/picture/phone.jpg")
+    private String mainImage;
+
+    @ApiModelProperty(value = "子图片", name = "subImages", example = "F:/picture/phone2.jpg")
+    private String subImages;
+
+    @ApiModelProperty(value = "详情介绍", name = "detail", example = "史上第一款折叠屏手机，惊艳世界的折叠屏先驱", required = true)
+    private String detail;
+
+    @ApiModelProperty(value = "价格", name = "price", example = "17000", required = true)
+    private BigDecimal price;
+
+    @ApiModelProperty(value = "库存", name = "stock", example = "100", required = true)
+    private Integer stock;
+
+    @ApiModelProperty(value = "状态", name = "status", example = "1", required = true)
+    private Integer status;
+
+    @ApiModelProperty(value = "创建时间", name = "createTime", example = "2019-04-13 21:42:40", required = true)
+    private String createTime;
+
+    @ApiModelProperty(value = "更新时间", name = "updateTime", example = "2019-04-15 21:42:40", required = true)
+    private String updateTime;
+
+    @ApiModelProperty(value = "图片服务器url前缀", name = "imageHost", example = "localhost", required = true)
+    private String imageHost;
+
+    @ApiModelProperty(value = "父分类id", name = "parentCategoryId", example = "0", required = true)
+    private Integer parentCategoryId;
 
     public Integer getId() {
         return id;
@@ -49,12 +77,12 @@ public class ProductDetailVo {
         this.name = name;
     }
 
-    public String getSubtitile() {
-        return subtitile;
+    public String getSubtitle() {
+        return subtitle;
     }
 
-    public void setSubtitile(String subtitile) {
-        this.subtitile = subtitile;
+    public void setSubtitle(String subtitle) {
+        this.subtitle = subtitle;
     }
 
     public String getMainImage() {

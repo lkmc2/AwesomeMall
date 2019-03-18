@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
 
-@ApiModel(value = "地址对象", description = "这是地址对象")
+@ApiModel(value = "收货地址对象", description = "这是收货地址对象")
 public class Shipping {
     @ApiModelProperty(hidden = true)
     private Integer id;

@@ -1,29 +1,39 @@
 package com.mmall.vo;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.math.BigDecimal;
 
 /**
  * Created by lkmc2 on 2018/2/21.
  * 订单子项值对象
  */
-
+@ApiModel(value = "订单子表VO对象", description = "这是订单子表VO对象")
 public class OrderItemVo {
+    @ApiModelProperty(value = "订单号", name = "orderNo", example = "1491753014256", required = true)
+    private Long orderNo;
 
-    private Long orderNo; //订单号
+    @ApiModelProperty(value = "产品Id", name = "id", example = "1", required = true)
+    private Integer productId;
 
-    private Integer productId; //产品id
+    @ApiModelProperty(value = "产品名称", name = "name", example = "三星Fold", required = true)
+    private String productName;
 
-    private String productName; //产品名
+    @ApiModelProperty(value = "产品图片", name = "productImage", example = "F:/picture/phone.jpg")
+    private String productImage;
 
-    private String productImage; //产品图
+    @ApiModelProperty(value = "生成订单时的商品单价", name = "currentUnitPrice", example = "17000", required = true)
+    private BigDecimal currentUnitPrice;
 
-    private BigDecimal currentUnitPrice; //当前价格
+    @ApiModelProperty(value = "数量", name = "quantity", example = "2", required = true)
+    private Integer quantity;
 
-    private Integer quantity; //数量
+    @ApiModelProperty(value = "总价", name = "totalPrice", example = "34000", required = true)
+    private BigDecimal totalPrice;
 
-    private BigDecimal totalPrice; //总价
-
-    private String createTime; //创建时间
+    @ApiModelProperty(value = "创建时间", name = "createTime", example = "2019-04-13 21:42:40", required = true)
+    private String createTime;
 
     public Long getOrderNo() {
         return orderNo;
