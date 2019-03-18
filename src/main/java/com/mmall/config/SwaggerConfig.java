@@ -17,7 +17,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  * @author lkmc2
  * @date 2018/9/25
  * @description Swagger2配置类
- * 页面访问路径：http://localhost:8080/mmall/swagger-ui.html
+ * 页面访问路径：http://localhost:8080/swagger-ui.html
  */
 
 

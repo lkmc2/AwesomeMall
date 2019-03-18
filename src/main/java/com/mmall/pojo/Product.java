@@ -1,31 +1,47 @@
 package com.mmall.pojo;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
+@ApiModel(value = "产品对象", description = "这是产品对象")
 public class Product {
+    @ApiModelProperty(value = "产品Id", name = "id", example = "1", required = true)
     private Integer id;
 
+    @ApiModelProperty(value = "分类Id", name = "categoryId", example = "1", required = true)
     private Integer categoryId;
 
+    @ApiModelProperty(value = "产品名称", name = "name", example = "三星Fold", required = true)
     private String name;
 
+    @ApiModelProperty(value = "子标题", name = "subtitle", example = "史上第一款折叠屏手机", required = true)
     private String subtitle;
 
+    @ApiModelProperty(value = "主图片", name = "mainImage", example = "F:/picture/phone.jpg")
     private String mainImage;
 
+    @ApiModelProperty(value = "子图片", name = "subImages", example = "F:/picture/phone2.jpg")
     private String subImages;
 
+    @ApiModelProperty(value = "详情介绍", name = "detail", example = "史上第一款折叠屏手机，惊艳世界的折叠屏先驱", required = true)
     private String detail;
 
+    @ApiModelProperty(value = "价格", name = "price", example = "17000", required = true)
     private BigDecimal price;
 
+    @ApiModelProperty(value = "库存", name = "stock", example = "100", required = true)
     private Integer stock;
 
+    @ApiModelProperty(value = "状态", name = "status", example = "1", required = true)
     private Integer status;
 
+    @ApiModelProperty(hidden = true)
     private Date createTime;
 
+    @ApiModelProperty(hidden = true)
     private Date updateTime;
 
     public Product(Integer id, Integer categoryId, String name, String subtitle, String mainImage, String subImages, String detail, BigDecimal price, Integer stock, Integer status, Date createTime, Date updateTime) {

@@ -10,12 +10,13 @@ import com.mmall.service.IFileService;
 import com.mmall.service.IProductService;
 import com.mmall.service.IUserService;
 import com.mmall.util.PropertiesUtil;
+import io.swagger.annotations.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,8 +28,8 @@ import java.util.Map;
  * Created by lkmc2 on 2018/2/10.
  * 产品管理控制器（后台）
  */
-
-@Controller
+@Api(value = "后台产品管理的接口", tags = {"后台产品管理的Controller"})
+@RestController
 @RequestMapping("/manage/product")
 public class ProductManageController {
 
@@ -41,15 +42,9 @@ public class ProductManageController {
     @Autowired
     private IFileService iFileService; //ftp服务接口
 
-    /**
-     * 保存产品（已存在则更新，未存在则插入）
-     *
-     * @param session 浏览器session
-     * @param product 产品
-     * @return 是否保存成功
-     */
-    @RequestMapping("save")
-    @ResponseBody //使返回值自动使用json序列化
+
+    @ApiOperation(value = "保存产品", notes = "已存在则更新，未存在则插入")
+    @PostMapping("save")
     public ServerResponse productSave(HttpSession session, Product product) {
         User user = (User) session.getAttribute(Const.CURRENT_USER); //从session中获取用户数据
         if (user == null) { //用户为空
@@ -63,16 +58,12 @@ public class ProductManageController {
         }
     }
 
-    /**
-     * 设置商品销售状态
-     *
-     * @param session   浏览器session
-     * @param productId 产品id
-     * @param status    销售状态
-     * @return 设置状态是否成功
-     */
-    @RequestMapping("set_sale_status")
-    @ResponseBody //使返回值自动使用json序列化
+    @ApiOperation(value = "设置商品销售状态", notes = "设置商品销售状态的接口")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "productId", value = "产品id", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "status", value = "销售状态", required = true, dataType = "int", paramType = "query")
+    })
+    @PostMapping("set_sale_status")
     public ServerResponse setSaleStatus(HttpSession session, Integer productId, Integer status) {
         User user = (User) session.getAttribute(Const.CURRENT_USER); //从session中获取用户数据
         if (user == null) { //用户为空
@@ -86,15 +77,9 @@ public class ProductManageController {
         }
     }
 
-    /**
-     * 根据id获取产品详情
-     *
-     * @param session   浏览器详情
-     * @param productId 产品id
-     * @return 产品详情
-     */
-    @RequestMapping("detail")
-    @ResponseBody //使返回值自动使用json序列化
+    @ApiOperation(value = "根据id获取产品详情", notes = "根据id获取产品详情的接口")
+    @ApiImplicitParam(name = "productId", value = "产品id", required = true, dataType = "int", paramType = "query")
+    @PostMapping("detail")
     public ServerResponse getDetail(HttpSession session, Integer productId) {
         User user = (User) session.getAttribute(Const.CURRENT_USER); //从session中获取用户数据
         if (user == null) { //用户为空
@@ -108,16 +93,12 @@ public class ProductManageController {
         }
     }
 
-    /**
-     * 获取产品列表
-     *
-     * @param session  浏览器详情
-     * @param pageNum  页号
-     * @param pageSize 展示页面产品数量
-     * @return 产品列表
-     */
-    @RequestMapping("list")
-    @ResponseBody //使返回值自动使用json序列化
+    @ApiOperation(value = "获取产品列表", notes = "获取产品列表的接口")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "pageNum", value = "页号", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "pageSize", value = "展示页面产品数量", dataType = "int", paramType = "query")
+    })
+    @PostMapping("list")
     public ServerResponse getList(HttpSession session,
                                   @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                   @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
@@ -133,18 +114,14 @@ public class ProductManageController {
         }
     }
 
-    /**
-     * 根据查询条件搜索产品
-     *
-     * @param session     浏览器session
-     * @param productName 产品名
-     * @param productId   产品id
-     * @param pageNum     当前页数
-     * @param pageSize    展示产品条数
-     * @return 搜索到的产品
-     */
-    @RequestMapping("search")
-    @ResponseBody //使返回值自动使用json序列化
+    @ApiOperation(value = "根据查询条件搜索产品", notes = "根据查询条件搜索产品的接口")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "productName", value = "产品名", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "productId", value = "产品id", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "pageNum", value = "当前页数", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "pageSize", value = "展示产品条数", dataType = "int", paramType = "query")
+    })
+    @PostMapping("search")
     public ServerResponse productSearch(HttpSession session,
                                         String productName,
                                         Integer productId,
@@ -162,18 +139,12 @@ public class ProductManageController {
         }
     }
 
-    /**
-     * 上传文件
-     *
-     * @param session 浏览器session
-     * @param file    需要上传的文件
-     * @param request http请求
-     * @return 带上传成功信息的响应
-     */
-    @RequestMapping("upload")
-    @ResponseBody //使返回值自动使用json序列化
+    @ApiOperation(value = "上传文件", notes = "上传文件的接口")
+    @PostMapping("upload")
     public ServerResponse upload(HttpSession session,
-                                 @RequestParam(value = "upload_file", required = false) MultipartFile file,
+                                 @ApiParam(value = "上传的文件", required = true)
+                                 @RequestParam(value = "upload_file")
+                                 MultipartFile file,
                                  HttpServletRequest request) {
         User user = (User) session.getAttribute(Const.CURRENT_USER); //从session中获取用户数据
         if (user == null) { //用户为空
@@ -185,7 +156,7 @@ public class ProductManageController {
             String targetFileName = iFileService.upload(file, path); //上传文件到指定路径
             String url = PropertiesUtil.getProperty("ftp.server.http.prefix") + targetFileName; //上传文件成功后生成url
 
-            Map fileMap = Maps.newHashMap(); //生成新的HashMap
+            Map<String, String> fileMap = Maps.newHashMap(); //生成新的HashMap
             fileMap.put("uri", targetFileName);
             fileMap.put("url", url);
             return ServerResponse.createBySuccess(fileMap);
@@ -194,22 +165,15 @@ public class ProductManageController {
         }
     }
 
-    /**
-     * 富文本图片上传
-     *
-     * @param session 浏览器会话
-     * @param file    文件
-     * @param request 请求
-     * @param response 响应
-     * @return 带上传数据的响应
-     */
-    @RequestMapping("richtext_img_upload")
-    @ResponseBody //使返回值自动使用json序列化
-    public Map richtextImgUpload(HttpSession session,
-                                 @RequestParam(value = "upload_file", required = false) MultipartFile file,
+    @ApiOperation(value = "富文本图片上传", notes = "富文本图片上传的接口")
+    @PostMapping("richtext_img_upload")
+    public Map<String, Object> richtextImgUpload(HttpSession session,
+                                 @ApiParam(value = "上传的文件", required = true)
+                                 @RequestParam(value = "upload_file")
+                                 MultipartFile file,
                                  HttpServletRequest request,
                                  HttpServletResponse response) {
-        Map resultMap = Maps.newHashMap(); //新建HashMap
+        Map<String, Object> resultMap = Maps.newHashMap(); //新建HashMap
         User user = (User) session.getAttribute(Const.CURRENT_USER); //从session中获取用户数据
         if (user == null) { //用户为空
             resultMap.put("success", false);
