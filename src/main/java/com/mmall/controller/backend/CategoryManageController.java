@@ -7,12 +7,14 @@ import com.mmall.pojo.User;
 import com.mmall.service.ICategoryService;
 import com.mmall.service.IUserService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
 
@@ -20,8 +22,8 @@ import javax.servlet.http.HttpSession;
  * Created by lkmc2 on 2018/2/9.
  * 分类管理控制器
  */
-
-@Controller
+@Api(value = "后台分类管理的接口", tags = {"后台分类管理的Controller"})
+@RestController
 @RequestMapping("/manage/category")
 public class CategoryManageController {
 
@@ -31,15 +33,13 @@ public class CategoryManageController {
     @Autowired
     private ICategoryService iCategoryService; //商品分类服务接口
 
-    /**
-     * 添加分类
-     * @param session 浏览器session
-     * @param categoryName 分类名
-     * @param parentId 父节点id
-     * @return 是否添加成功
-     */
-    @RequestMapping("add_category")
-    @ResponseBody //使返回值自动使用json序列化
+
+    @ApiOperation(value = "添加分类", notes = "添加分类的接口")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "categoryName", value = "分类名", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "parentId", value = "父节点id", required = true, dataType = "int", paramType = "query")
+    })
+    @PostMapping("add_category")
     public ServerResponse addCategory(HttpSession session, String categoryName,
                                       @RequestParam(value = "parentId", defaultValue = "0") int parentId) {
         User user = (User) session.getAttribute(Const.CURRENT_USER); //获取session中的用户信息
@@ -55,15 +55,12 @@ public class CategoryManageController {
         }
     }
 
-    /**
-     * 设置分类名称
-     * @param session 浏览器session
-     * @param categoryId 分类id
-     * @param categoryName 分类名
-     * @return 设置分类是否成功
-     */
-    @RequestMapping("set_category_name")
-    @ResponseBody //使返回值自动使用json序列化
+    @ApiOperation(value = "设置分类名称", notes = "设置分类名称的接口")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "categoryId", value = "分类id", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "categoryName", value = "分类名", required = true, dataType = "String", paramType = "query")
+    })
+    @PostMapping("set_category_name")
     public ServerResponse setCategoryName(HttpSession session, Integer categoryId, String categoryName) {
         User user = (User) session.getAttribute(Const.CURRENT_USER); //获取session中的用户信息
         if (user == null) { //用户为空
@@ -78,14 +75,9 @@ public class CategoryManageController {
         }
     }
 
-    /**
-     * 查询子节点的分类信息，并且不递归，保持平级
-     * @param session 浏览器session
-     * @param categoryId 分类id
-     * @return 带子节点数据的响应
-     */
-    @RequestMapping("get_category")
-    @ResponseBody //使返回值自动使用json序列化
+    @ApiOperation(value = "查询子节点的分类信息", notes = "查询子节点的分类信息，并且不递归，保持平级")
+    @ApiImplicitParam(name = "categoryId", value = "分类id", dataType = "int", paramType = "query")
+    @PostMapping("get_category")
     public ServerResponse getChildrenParallelCategory(HttpSession session,
                                                       @RequestParam(value = "categoryId", defaultValue = "0") Integer categoryId) {
         User user = (User) session.getAttribute(Const.CURRENT_USER); //获取session中的用户信息
@@ -102,14 +94,9 @@ public class CategoryManageController {
         }
     }
 
-    /**
-     * 查询子节点并遍历子节点
-     * @param session 浏览器session
-     * @param categoryId 分类id
-     * @return 带子节点数据的响应
-     */
-    @RequestMapping("get_deep_category")
-    @ResponseBody //使返回值自动使用json序列化
+    @ApiOperation(value = "查询分类子节点并遍历子节点", notes = "查询分类子节点并遍历子节点的接口")
+    @ApiImplicitParam(name = "categoryId", value = "分类id", dataType = "int", paramType = "query")
+    @PostMapping("get_deep_category")
     public ServerResponse getChildrenAndDeepChildrenCategory(HttpSession session,
                                                       @RequestParam(value = "categoryId", defaultValue = "0") Integer categoryId) {
         User user = (User) session.getAttribute(Const.CURRENT_USER); //获取session中的用户信息
@@ -125,4 +112,5 @@ public class CategoryManageController {
             return ServerResponse.createByErrorMessage("无权限操作，需要管理员权限");
         }
     }
+
 }

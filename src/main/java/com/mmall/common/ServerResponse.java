@@ -1,5 +1,7 @@
 package com.mmall.common;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
@@ -9,11 +11,17 @@ import java.io.Serializable;
  * Created by lkmc2 on 2018/2/2.
  * 服务响应对象
  */
+@ApiModel(value = "服务响应对象", description = "这是服务响应对象")
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL) //将该类序列化为Json（属性为null时，该属性不显示）
 public class ServerResponse<T> implements Serializable {
-    private int status; //返回状态
-    private String msg; //消息
-    private T data; //数据
+    @ApiModelProperty(value = "返回状态", name = "status")
+    private int status;
+
+    @ApiModelProperty(value = "消息", name = "msg")
+    private String msg;
+
+    @ApiModelProperty(value = "数据", name = "data")
+    private T data;
 
     private ServerResponse(int status) {
         this.status = status;

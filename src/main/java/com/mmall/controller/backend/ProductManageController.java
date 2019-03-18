@@ -13,10 +13,7 @@ import com.mmall.util.PropertiesUtil;
 import io.swagger.annotations.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -45,7 +42,7 @@ public class ProductManageController {
 
     @ApiOperation(value = "保存产品", notes = "已存在则更新，未存在则插入")
     @PostMapping("save")
-    public ServerResponse productSave(HttpSession session, Product product) {
+    public ServerResponse productSave(HttpSession session, @RequestBody Product product) {
         User user = (User) session.getAttribute(Const.CURRENT_USER); //从session中获取用户数据
         if (user == null) { //用户为空
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录，请登录管理员");
@@ -60,8 +57,8 @@ public class ProductManageController {
 
     @ApiOperation(value = "设置商品销售状态", notes = "设置商品销售状态的接口")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "productId", value = "产品id", required = true, dataType = "int", paramType = "query"),
-            @ApiImplicitParam(name = "status", value = "销售状态", required = true, dataType = "int", paramType = "query")
+            @ApiImplicitParam(name = "productId", value = "产品id", example = "26", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "status", value = "销售状态", example = "1", required = true, dataType = "int", paramType = "query")
     })
     @PostMapping("set_sale_status")
     public ServerResponse setSaleStatus(HttpSession session, Integer productId, Integer status) {
@@ -78,7 +75,7 @@ public class ProductManageController {
     }
 
     @ApiOperation(value = "根据id获取产品详情", notes = "根据id获取产品详情的接口")
-    @ApiImplicitParam(name = "productId", value = "产品id", required = true, dataType = "int", paramType = "query")
+    @ApiImplicitParam(name = "productId", value = "产品id", example = "26", required = true, dataType = "int", paramType = "query")
     @PostMapping("detail")
     public ServerResponse getDetail(HttpSession session, Integer productId) {
         User user = (User) session.getAttribute(Const.CURRENT_USER); //从session中获取用户数据
@@ -95,8 +92,8 @@ public class ProductManageController {
 
     @ApiOperation(value = "获取产品列表", notes = "获取产品列表的接口")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "pageNum", value = "页号", dataType = "int", paramType = "query"),
-            @ApiImplicitParam(name = "pageSize", value = "展示页面产品数量", dataType = "int", paramType = "query")
+            @ApiImplicitParam(name = "pageNum", value = "页号", dataType = "int", example = "1", paramType = "query"),
+            @ApiImplicitParam(name = "pageSize", value = "展示页面产品数量", dataType = "int", example = "10", paramType = "query")
     })
     @PostMapping("list")
     public ServerResponse getList(HttpSession session,
@@ -116,10 +113,10 @@ public class ProductManageController {
 
     @ApiOperation(value = "根据查询条件搜索产品", notes = "根据查询条件搜索产品的接口")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "productName", value = "产品名", required = true, dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "productId", value = "产品id", required = true, dataType = "int", paramType = "query"),
-            @ApiImplicitParam(name = "pageNum", value = "当前页数", dataType = "int", paramType = "query"),
-            @ApiImplicitParam(name = "pageSize", value = "展示产品条数", dataType = "int", paramType = "query")
+            @ApiImplicitParam(name = "productName", value = "产品名", example = "iPhone", dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "productId", value = "产品id", example = "26", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "pageNum", value = "当前页数", example = "1", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "pageSize", value = "展示产品条数", example = "10", dataType = "int", paramType = "query")
     })
     @PostMapping("search")
     public ServerResponse productSearch(HttpSession session,
