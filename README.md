@@ -34,4 +34,4 @@
 
 5. 浏览器中打开http://localhost:8080/swagger-ui.html ，可访问到项目的API文档。
 
-<img src="https://raw.githubusercontent.com/lkmc2/AwesomeVideo/master/picture/swagger2%E6%88%AA%E5%9B%BE.png"/>
+<img src="https://raw.githubusercontent.com/lkmc2/AwesomeMall/master/picture/Swagger2.png"/>
