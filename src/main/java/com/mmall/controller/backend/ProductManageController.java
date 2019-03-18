@@ -48,7 +48,7 @@ public class ProductManageController {
      * @param product 产品
      * @return 是否保存成功
      */
-    @RequestMapping("save.do")
+    @RequestMapping("save")
     @ResponseBody //使返回值自动使用json序列化
     public ServerResponse productSave(HttpSession session, Product product) {
         User user = (User) session.getAttribute(Const.CURRENT_USER); //从session中获取用户数据
@@ -71,7 +71,7 @@ public class ProductManageController {
      * @param status    销售状态
      * @return 设置状态是否成功
      */
-    @RequestMapping("set_sale_status.do")
+    @RequestMapping("set_sale_status")
     @ResponseBody //使返回值自动使用json序列化
     public ServerResponse setSaleStatus(HttpSession session, Integer productId, Integer status) {
         User user = (User) session.getAttribute(Const.CURRENT_USER); //从session中获取用户数据
@@ -93,7 +93,7 @@ public class ProductManageController {
      * @param productId 产品id
      * @return 产品详情
      */
-    @RequestMapping("detail.do")
+    @RequestMapping("detail")
     @ResponseBody //使返回值自动使用json序列化
     public ServerResponse getDetail(HttpSession session, Integer productId) {
         User user = (User) session.getAttribute(Const.CURRENT_USER); //从session中获取用户数据
@@ -116,7 +116,7 @@ public class ProductManageController {
      * @param pageSize 展示页面产品数量
      * @return 产品列表
      */
-    @RequestMapping("list.do")
+    @RequestMapping("list")
     @ResponseBody //使返回值自动使用json序列化
     public ServerResponse getList(HttpSession session,
                                   @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
@@ -143,7 +143,7 @@ public class ProductManageController {
      * @param pageSize    展示产品条数
      * @return 搜索到的产品
      */
-    @RequestMapping("search.do")
+    @RequestMapping("search")
     @ResponseBody //使返回值自动使用json序列化
     public ServerResponse productSearch(HttpSession session,
                                         String productName,
@@ -170,7 +170,7 @@ public class ProductManageController {
      * @param request http请求
      * @return 带上传成功信息的响应
      */
-    @RequestMapping("upload.do")
+    @RequestMapping("upload")
     @ResponseBody //使返回值自动使用json序列化
     public ServerResponse upload(HttpSession session,
                                  @RequestParam(value = "upload_file", required = false) MultipartFile file,
@@ -203,7 +203,7 @@ public class ProductManageController {
      * @param response 响应
      * @return 带上传数据的响应
      */
-    @RequestMapping("richtext_img_upload.do")
+    @RequestMapping("richtext_img_upload")
     @ResponseBody //使返回值自动使用json序列化
     public Map richtextImgUpload(HttpSession session,
                                  @RequestParam(value = "upload_file", required = false) MultipartFile file,

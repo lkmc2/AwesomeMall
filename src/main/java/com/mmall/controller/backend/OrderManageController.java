@@ -38,7 +38,7 @@ public class OrderManageController {
      * @param pageSize 页面展示条数
      * @return 返回带分页信息的响应
      */
-    @RequestMapping("list.do")
+    @RequestMapping("list")
     @ResponseBody //使返回值自动使用json序列化
     public ServerResponse<PageInfo> orderList(HttpSession session,
                                               @RequestParam(value = "pageNum", defaultValue = "1")int pageNum,
@@ -61,7 +61,7 @@ public class OrderManageController {
      * @param orderNo 订单号
      * @return 带订单值对象的响应
      */
-    @RequestMapping("detail.do")
+    @RequestMapping("detail")
     @ResponseBody //使返回值自动使用json序列化
     public ServerResponse<OrderVo> orderDetail(HttpSession session, Long orderNo) {
         User user = (User) session.getAttribute(Const.CURRENT_USER); //从session中获取用户数据
@@ -84,7 +84,7 @@ public class OrderManageController {
      * @param pageSize 页面展示条数
      * @return 带分页信息的响应
      */
-    @RequestMapping("search.do")
+    @RequestMapping("search")
     @ResponseBody //使返回值自动使用json序列化
     public ServerResponse<PageInfo> orderSearch(HttpSession session,
                                                Long orderNo,
@@ -108,7 +108,7 @@ public class OrderManageController {
      * @param orderNo 订单号
      * @return 是否发货成功
      */
-    @RequestMapping("send_goods.do")
+    @RequestMapping("send_goods")
     @ResponseBody //使返回值自动使用json序列化
     public ServerResponse<String> orderSendGoods(HttpSession session, Long orderNo) {
         User user = (User) session.getAttribute(Const.CURRENT_USER); //从session中获取用户数据

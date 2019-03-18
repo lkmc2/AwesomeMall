@@ -42,7 +42,7 @@ public class OrderController {
      * @param shippingId 送货地址id
      * @return 带结果参数的响应
      */
-    @RequestMapping("create.do")
+    @RequestMapping("create")
     @ResponseBody //使返回值自动使用json序列化
     public ServerResponse create(HttpSession session, Integer shippingId) {
         User user = (User) session.getAttribute(Const.CURRENT_USER); //从session中获取用户信息
@@ -58,7 +58,7 @@ public class OrderController {
      * @param orderNo 订单号
      * @return 带结果参数的响应
      */
-    @RequestMapping("cancel.do")
+    @RequestMapping("cancel")
     @ResponseBody //使返回值自动使用json序列化
     public ServerResponse cancel(HttpSession session, Long orderNo) {
         User user = (User) session.getAttribute(Const.CURRENT_USER); //从session中获取用户信息
@@ -73,7 +73,7 @@ public class OrderController {
      * @param session 浏览器session
      * @return 带订单产品值对象的响应
      */
-    @RequestMapping("get_order_cart_product.do")
+    @RequestMapping("get_order_cart_product")
     @ResponseBody //使返回值自动使用json序列化
     public ServerResponse getOrderCartProduct(HttpSession session) {
         User user = (User) session.getAttribute(Const.CURRENT_USER); //从session中获取用户信息
@@ -89,7 +89,7 @@ public class OrderController {
      * @param orderNo 订单号
      * @return 返回带订单值对象的响应
      */
-    @RequestMapping("detail.do")
+    @RequestMapping("detail")
     @ResponseBody //使返回值自动使用json序列化
     public ServerResponse detail(HttpSession session, Long orderNo) {
         User user = (User) session.getAttribute(Const.CURRENT_USER); //从session中获取用户信息
@@ -106,7 +106,7 @@ public class OrderController {
      * @param pageSize 页面展示条数
      * @return 带分页信息的响应
      */
-    @RequestMapping("list.do")
+    @RequestMapping("list")
     @ResponseBody //使返回值自动使用json序列化
     public ServerResponse list(HttpSession session,
                                @RequestParam(value = "pageNum", defaultValue = "1")int pageNum,
@@ -126,7 +126,7 @@ public class OrderController {
      * @param request 浏览器请求
      * @return 带参数信息的响应
      */
-    @RequestMapping("pay.do")
+    @RequestMapping("pay")
     @ResponseBody //使返回值自动使用json序列化
     public ServerResponse pay(HttpSession session, Long orderNo, HttpServletRequest request) {
         User user = (User) session.getAttribute(Const.CURRENT_USER); //从session中获取用户信息
@@ -144,7 +144,7 @@ public class OrderController {
      * @param request 浏览器请求
      * @return 是否回调成功
      */
-    @RequestMapping("callback.do")
+    @RequestMapping("callback")
     @ResponseBody //使返回值自动使用json序列化
     public Object alipayCallback(HttpServletRequest request) {
         Map<String, String> params = Maps.newHashMap(); //新建参数map
@@ -192,7 +192,7 @@ public class OrderController {
      * @param orderNo 订单号
      * @return 是否交易成功
      */
-    @RequestMapping("query_order_pay_status.do")
+    @RequestMapping("query_order_pay_status")
     @ResponseBody //使返回值自动使用json序列化
     public ServerResponse<Boolean> queryOrderPayStatus(HttpSession session, Long orderNo) {
         User user = (User) session.getAttribute(Const.CURRENT_USER); //从session中获取用户信息

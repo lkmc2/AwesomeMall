@@ -6,6 +6,8 @@ import com.mmall.common.ServerResponse;
 import com.mmall.pojo.User;
 import com.mmall.service.ICategoryService;
 import com.mmall.service.IUserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,7 +38,7 @@ public class CategoryManageController {
      * @param parentId 父节点id
      * @return 是否添加成功
      */
-    @RequestMapping("add_category.do")
+    @RequestMapping("add_category")
     @ResponseBody //使返回值自动使用json序列化
     public ServerResponse addCategory(HttpSession session, String categoryName,
                                       @RequestParam(value = "parentId", defaultValue = "0") int parentId) {
@@ -60,7 +62,7 @@ public class CategoryManageController {
      * @param categoryName 分类名
      * @return 设置分类是否成功
      */
-    @RequestMapping("set_category_name.do")
+    @RequestMapping("set_category_name")
     @ResponseBody //使返回值自动使用json序列化
     public ServerResponse setCategoryName(HttpSession session, Integer categoryId, String categoryName) {
         User user = (User) session.getAttribute(Const.CURRENT_USER); //获取session中的用户信息
@@ -82,7 +84,7 @@ public class CategoryManageController {
      * @param categoryId 分类id
      * @return 带子节点数据的响应
      */
-    @RequestMapping("get_category.do")
+    @RequestMapping("get_category")
     @ResponseBody //使返回值自动使用json序列化
     public ServerResponse getChildrenParallelCategory(HttpSession session,
                                                       @RequestParam(value = "categoryId", defaultValue = "0") Integer categoryId) {
@@ -106,7 +108,7 @@ public class CategoryManageController {
      * @param categoryId 分类id
      * @return 带子节点数据的响应
      */
-    @RequestMapping("get_deep_category.do")
+    @RequestMapping("get_deep_category")
     @ResponseBody //使返回值自动使用json序列化
     public ServerResponse getChildrenAndDeepChildrenCategory(HttpSession session,
                                                       @RequestParam(value = "categoryId", defaultValue = "0") Integer categoryId) {

@@ -30,7 +30,7 @@ public class CartController {
      * @param session 浏览器session
      * @return 带购物车信息的响应
      */
-    @RequestMapping("list.do")
+    @RequestMapping("list")
     @ResponseBody //使返回值自动使用json序列化
     public ServerResponse<CartVo> list(HttpSession session) {
         User user = (User) session.getAttribute(Const.CURRENT_USER); //从session中获取用户信息
@@ -47,7 +47,7 @@ public class CartController {
      * @param productId 产品id
      * @return 带购物车信息的响应
      */
-    @RequestMapping("add.do")
+    @RequestMapping("add")
     @ResponseBody //使返回值自动使用json序列化
     public ServerResponse<CartVo> add(HttpSession session, Integer count, Integer productId) {
         User user = (User) session.getAttribute(Const.CURRENT_USER); //从session中获取用户信息
@@ -65,7 +65,7 @@ public class CartController {
      * @param productId 产品id
      * @return 带购物车信息的响应
      */
-    @RequestMapping("update.do")
+    @RequestMapping("update")
     @ResponseBody //使返回值自动使用json序列化
     public ServerResponse<CartVo> update(HttpSession session, Integer count, Integer productId) {
         User user = (User) session.getAttribute(Const.CURRENT_USER); //从session中获取用户信息
@@ -81,7 +81,7 @@ public class CartController {
      * @param productIds 产品多个id
      * @return 带购物车信息的响应
      */
-    @RequestMapping("delete_product.do")
+    @RequestMapping("delete_product")
     @ResponseBody //使返回值自动使用json序列化
     public ServerResponse<CartVo> deleteProduct(HttpSession session, String productIds) {
         User user = (User) session.getAttribute(Const.CURRENT_USER); //从session中获取用户信息
@@ -96,7 +96,7 @@ public class CartController {
      * @param session 浏览器session
      * @return 带购物车信息的响应
      */
-    @RequestMapping("select_all.do")
+    @RequestMapping("select_all")
     @ResponseBody //使返回值自动使用json序列化
     public ServerResponse<CartVo> selectAll(HttpSession session) {
         User user = (User) session.getAttribute(Const.CURRENT_USER); //从session中获取用户信息
@@ -111,7 +111,7 @@ public class CartController {
      * @param session 浏览器session
      * @return 带购物车信息的响应
      */
-    @RequestMapping("un_select_all.do")
+    @RequestMapping("un_select_all")
     @ResponseBody //使返回值自动使用json序列化
     public ServerResponse<CartVo> unSelectAll(HttpSession session) {
         User user = (User) session.getAttribute(Const.CURRENT_USER); //从session中获取用户信息
@@ -127,7 +127,7 @@ public class CartController {
      * @param productId 产品id
      * @return 带购物车信息的响应
      */
-    @RequestMapping("select.do")
+    @RequestMapping("select")
     @ResponseBody //使返回值自动使用json序列化
     public ServerResponse<CartVo> unSelectAll(HttpSession session, Integer productId) {
         User user = (User) session.getAttribute(Const.CURRENT_USER); //从session中获取用户信息
@@ -143,7 +143,7 @@ public class CartController {
      * @param productId 产品id
      * @return 带购物车信息的响应
      */
-    @RequestMapping("un_select.do")
+    @RequestMapping("un_select")
     @ResponseBody //使返回值自动使用json序列化
     public ServerResponse<CartVo> unSelect(HttpSession session, Integer productId) {
         User user = (User) session.getAttribute(Const.CURRENT_USER); //从session中获取用户信息
@@ -159,7 +159,7 @@ public class CartController {
      * @param productId 产品id
      * @return 带所有产品数的响应
      */
-    @RequestMapping("get_cart_product_count.do")
+    @RequestMapping("get_cart_product_count")
     @ResponseBody //使返回值自动使用json序列化
     public ServerResponse<Integer> get(HttpSession session, Integer productId) {
         User user = (User) session.getAttribute(Const.CURRENT_USER); //从session中获取用户信息

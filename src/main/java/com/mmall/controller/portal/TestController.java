@@ -16,7 +16,7 @@ public class TestController {
 
     private static Logger logger = LoggerFactory.getLogger(TestController.class); //日志记录器
 
-    @RequestMapping("test.do")
+    @RequestMapping("test")
     @ResponseBody
     public String saySomething(String string) {
         logger.info("test info");

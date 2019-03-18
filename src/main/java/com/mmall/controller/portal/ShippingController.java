@@ -32,7 +32,7 @@ public class ShippingController {
      * @param shipping 地址对象
      * @return 带地址信息的响应
      */
-    @RequestMapping("add.do")
+    @RequestMapping("add")
     @ResponseBody //使返回值自动使用json序列化
     public ServerResponse add(HttpSession session, Shipping shipping) {
         User user = (User) session.getAttribute(Const.CURRENT_USER); //从session中获取用户信息
@@ -48,7 +48,7 @@ public class ShippingController {
      * @param shippingId 地址id
      * @return 带是否删除成功信息的响应
      */
-    @RequestMapping("del.do")
+    @RequestMapping("del")
     @ResponseBody //使返回值自动使用json序列化
     public ServerResponse del(HttpSession session, Integer shippingId) {
         User user = (User) session.getAttribute(Const.CURRENT_USER); //从session中获取用户信息
@@ -64,7 +64,7 @@ public class ShippingController {
      * @param shipping 地址对象
      * @return 是否更新成功信息的响应
      */
-    @RequestMapping("update.do")
+    @RequestMapping("update")
     @ResponseBody //使返回值自动使用json序列化
     public ServerResponse update(HttpSession session, Shipping shipping) {
         User user = (User) session.getAttribute(Const.CURRENT_USER); //从session中获取用户信息
@@ -80,7 +80,7 @@ public class ShippingController {
      * @param shippingId 地址id
      * @return 带地址信息的响应
      */
-    @RequestMapping("select.do")
+    @RequestMapping("select")
     @ResponseBody //使返回值自动使用json序列化
     public ServerResponse<Shipping> select(HttpSession session, Integer shippingId) {
         User user = (User) session.getAttribute(Const.CURRENT_USER); //从session中获取用户信息
@@ -97,7 +97,7 @@ public class ShippingController {
      * @param session 浏览器session
      * @return 带地址信息的响应
      */
-    @RequestMapping("list.do")
+    @RequestMapping("list")
     @ResponseBody //使返回值自动使用json序列化
     public ServerResponse<PageInfo> list(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                          @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,

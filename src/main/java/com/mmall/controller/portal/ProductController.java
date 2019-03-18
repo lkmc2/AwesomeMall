@@ -27,7 +27,7 @@ public class ProductController {
      * @param productId 产品id
      * @return 带产品详情的响应
      */
-    @RequestMapping("detail.do")
+    @RequestMapping("detail")
     @ResponseBody //使返回值自动使用json序列化
     public ServerResponse<ProductDetailVo> detail(Integer productId) {
         return iProductService.getProductDetail(productId); //根据id查询产品细节
@@ -42,7 +42,7 @@ public class ProductController {
      * @param orderBy 排列顺序（升序、降序）
      * @return 带页面信息的响应
      */
-    @RequestMapping("list.do")
+    @RequestMapping("list")
     @ResponseBody //使返回值自动使用json序列化
     public ServerResponse<PageInfo> list(@RequestParam(value = "keyword", required = false) String keyword,
                                          @RequestParam(value = "categoryId", required = false) Integer categoryId,
