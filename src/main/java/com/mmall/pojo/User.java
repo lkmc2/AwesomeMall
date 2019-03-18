@@ -1,26 +1,40 @@
 package com.mmall.pojo;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.Date;
 
+@ApiModel(value = "用户对象", description = "用户对象")
 public class User {
+    @ApiModelProperty(hidden = true)
     private Integer id;
 
+    @ApiModelProperty(value = "用户名", name = "username", example = "jack", required = true)
     private String username;
 
+    @ApiModelProperty(value = "密码", name = "password", example = "123456", required = true)
     private String password;
 
+    @ApiModelProperty(value = "邮箱", name = "email", example = "abc@163.com", required = true)
     private String email;
 
+    @ApiModelProperty(value = "手机号", name = "phone", example = "13800001234", required = true)
     private String phone;
 
+    @ApiModelProperty(value = "忘记密码时回答的问题", name = "question", example = "我的生日是多少", required = true)
     private String question;
 
+    @ApiModelProperty(value = "忘记密码时回答的问题的答案", name = "answer", example = "我的生日是多少", required = true)
     private String answer;
 
+    @ApiModelProperty(hidden = true)
     private Integer role;
 
+    @ApiModelProperty(hidden = true)
     private Date createTime;
 
+    @ApiModelProperty(hidden = true)
     private Date updateTime;
 
     public User(Integer id, String username, String password, String email, String phone, String question, String answer, Integer role, Date createTime, Date updateTime) {
